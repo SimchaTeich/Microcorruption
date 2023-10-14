@@ -7,7 +7,7 @@ A challenge very similar to New Orleans that illustrates how bad it is to keep t
 
 The function `main` of this challenge is very similar to the main function of New Orleans, except that the inner code of the `unlook_door` function is written here in the main.
 
-This is also the place to say, that opening the door is activation of the interrupt numbered 0x7f.
+This is also the place to say, that opening the door is activation of the 0x7f interrupt.
 
 <img src="./2.1.png" width="75%"></img>
 
