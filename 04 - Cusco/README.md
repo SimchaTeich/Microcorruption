@@ -26,7 +26,7 @@ Recall that since we do not have access to the code that checks the password, we
 
 Therefore, all we will have to do is make sure that when the code reaches the ret command of the `login` function, it jumps to `unlock_door` at address 0x4446.
 
-Therefore the cracking input will contain 0x10 random bytes, and another 0x2 bytes that will overwrite the return address to the sort (don't forget the little endian).
+So, the cracking input will contain 0x10 random bytes, and another 0x2 bytes that will overwrite the return address to the `main` (don't forget the little endian).
 
 Bingo.
 
