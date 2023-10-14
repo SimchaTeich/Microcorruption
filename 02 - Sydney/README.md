@@ -6,7 +6,7 @@ A challenge very similar to New Orleans that illustrates how bad it is to keep t
 ## The way
 
 Function main is very similar to New Orleans but
-without calling to `unlook_door`. Instead, the operation of unlooking the door is raise interrupt with 0xf7 as parameter.
+without calling to `unlook_door`. Instead, the operation of unlooking the door is raise interrupt with 0x7f as parameter.
 
 <img src="./2.1.png" width="75%"></img>
 
