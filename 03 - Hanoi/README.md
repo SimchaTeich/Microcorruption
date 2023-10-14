@@ -10,7 +10,7 @@ First of all, we will notice that the requirement from the user is a password wh
 
 But, a careful look into the `login` function indicates that input as large as 0x1c bytes can be entered (into 0x2400 address).
 
-<img src="./3.2.png" width="75%"></img>
+<img src="./3.2.png" width="60%"></img>
 
 At the beginning of the challenge it was said that there is an external component with which the lock communicates.
 
@@ -21,7 +21,7 @@ But, after the above test, a strange process takes place.
 
 If `test_password_valid` returns 0 (in our case it will always happen because we have no way of knowing what the password is), then it will compare byte 0x2410 with the value 0xe4 and open the door if they are equal. But, if a 1 was returned from the `test_password_valid` function, then we would put 0x61 at the same address and the door would not open. That's why the process is strange to me...
 
-<img src="./3.3.png" width="75%"></img>
+<img src="./3.3.png" width="60%"></img>
 
 So, remember that the user can insert more than 0x10 bytes? Beauty.
 
