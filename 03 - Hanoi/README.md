@@ -6,7 +6,7 @@ A very simple case of exploiting the possibility to insert more input than the a
 ## The way
 First of all, we will notice that the requirement from the user is a password whose size is up to 0x10 bytes.
 
-<img src="./3.1.png" width="75%"></img>
+<img src="./3.1.png" width="50%"></img>
 
 But, a careful look into the `login` function indicates that input as large as 0x1c bytes can be entered (into 0x2400 address).
 
