@@ -21,6 +21,8 @@ So, password is very clearly..
 
 
 ## The cracking input (as bytes)
-> 5f5f305d417e3100
+```
+5f5f305d417e3100
+```
 
 
