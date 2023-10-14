@@ -17,6 +17,8 @@ Therefore, we will examine the `check_password` function. It seems that the pass
 So, the password will be any series of 0x8 bytes.
 
 ## The cracking input (as bytes)
-> 0102030405060708
+```
+0102030405060708
+```
 
 
