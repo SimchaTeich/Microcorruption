@@ -14,18 +14,21 @@ Note that the `login` function is called directly from `main`. This means that t
 
 <img src="./4.2.png" width="60%"></img>
 
-And we will also note that the stack frame of login cannot really contain 0x30 without overriding part of the stack frame of main.
+And we will also note that the stack frame of `login` cannot really contain 0x30 without overriding part of the stack frame of `main`.
 
 This can be seen right at the moment when we want to call `getsn` and put the input directly at the top of the stack:
 
 <img src="./4.3.png" width="75%"></img>
 
-Recall that since we do not have access to the code that checks the password, we will not be able to guess the correct password. And the test_password_valid function will return 0. Therefore, we would like the program to open the door even if the password is incorrect.
+Recall that since we do not have access to the code that checks the password, we will not be able to guess the correct password. And the `test_password_valid` function will return 0. Therefore, we would like the program to open the door even if the password is incorrect.
 
 <img src="./4.4.png" width="60%"></img>
 
 Therefore, all we will have to do is make sure that when the code reaches the ret command of the `login` function, it jumps to `unlock_door` at address 0x4446.
-Therefore the cracking input will contain 0x10 random bytes, and another 0x2 bytes that will overwrite the return address to the sort (don't forget the little endian). Bingo.
+
+Therefore the cracking input will contain 0x10 random bytes, and another 0x2 bytes that will overwrite the return address to the sort (don't forget the little endian).
+
+Bingo.
 
 ## The cracking input (as bytes)
 ```
