@@ -15,11 +15,16 @@ But, a careful look into the `login` function indicates that input as large as 0
 At the beginning of the challenge it was said that there is an external component with which the lock communicates.
 
 It means the password is not in the code this time..
-A look at the function test_password_valid confirms this, since checking the input from the user against the password is done using an interrupt (external code). Therefore there is no point in bringing a photo of the function here.
 
-But, after the above test, a strange process takes place.
+A look at the function `test_password_valid` confirms this, since checking the input from the user against the password is done using an interrupt (external code).
 
-If `test_password_valid` returns 0 (in our case it will always happen because we have no way of knowing what the password is), then it will compare byte 0x2410 with the value 0xe4 and open the door if they are equal. But, if a 1 was returned from the `test_password_valid` function, then we would put 0x61 at the same address and the door would not open. That's why the process is strange to me...
+Therefore there is no point in bringing a photo of the function here.
+
+But, after the above test, a strange process takes place. If `test_password_valid` returns 0 (in our case it will always happen because we have no way of knowing what the password is), then it will compare byte 0x2410 with the value 0xe4 and open the door if they are equal.
+
+But, if a 1 was returned from the `test_password_valid` function, then we would put 0x61 at the same address and the door would not open.
+
+That's why the process is strange to me...
 
 <img src="./3.3.png" width="60%"></img>
 
