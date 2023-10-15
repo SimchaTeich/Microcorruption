@@ -19,7 +19,7 @@ In function `main` there is only a call to `login`. That's why we'll examine `lo
 * Checking the input against the password.
     * `conditional_unlook_door` function probably opens the door if the password is correct.
     * interrupt is used in it.
-* Whatever conditional_unlock_door returned, the program will terminate.
+* Whatever `conditional_unlock_door` returned, the program will terminate.
 
 We note that the user was indeed asked to enter input up to 0x10 bytes long. And let's also note that technically it can be up to 0x30.
 
