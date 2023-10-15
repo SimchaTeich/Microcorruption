@@ -39,6 +39,8 @@ So we will disassemble first the short function, and this is the code we will ge
 
 This is exactly the code of `INT` from the previous challenges.
 
+* Note: it's means that instead of seeing ***call INT*** below, we will see ***call #0x2464*** which is the address of this function.
+
 So, the long code is surely also responsible for printing the message to the screen, both receiving the input from the user and comparing it to the password.
 
 You can also see it in the code itself in the next picture, and also deduce it ourselves. Because so far, for the user "nothing happened", and immediately after this function the program ends...
