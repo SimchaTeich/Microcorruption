@@ -45,9 +45,22 @@ You can also see it in the code itself in the next picture, and also deduce it o
 
 <img src="./5.10.png" width="60%"></img>
 
+* Prints the sentence: "what's the password?"
+    * interrupt 0x0 - print one char
+    * "what's the password?" saves at address 0x4520.
+    * print char by char in loop.
+* Prints '\n'
+    * interrupt 0x0
+    * asscii of '\n' is 0xa.
+* Gets input from user
+    * interrup 0x2
+    * size up to 0x1f bytes
+    * While debugging it is easy to see that the input goes into address 0x43da.
+* comparison operation
+    * between the first 2 bytes of the user input to the values 0x74 and 0x68.
+    * If they are equal it will open the door. Otherwise it will skip opening the door.
 
-
-
+So, the password is any series of bytes (up to 0x1f bytes long) which starts with 0x74 and 0x68.
 
 ## The cracking input (as bytes)
 ```
