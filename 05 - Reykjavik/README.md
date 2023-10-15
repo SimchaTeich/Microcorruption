@@ -47,6 +47,7 @@ You can also see it in the code itself in the next picture, and also deduce it o
 
 <img src="./5.10.png" width="50%"></img>
 
+*Explanation of the code parts above:*
 * Prints the sentence: "what's the password?"
     * interrupt 0x0 - print one char
     * "what's the password?" saved at address 0x4520.
@@ -61,6 +62,8 @@ You can also see it in the code itself in the next picture, and also deduce it o
 * comparison operation
     * between the first 2 bytes of the user input to the values 0x74 and 0x68.
     * If they are equal it will open the door. Otherwise it will skip opening the door.
+* unlock the door
+    * interrupt 0x7f
 
 So, the password is any series of bytes (up to 0x1f bytes long) which starts with 0x74 and 0x68.
 
