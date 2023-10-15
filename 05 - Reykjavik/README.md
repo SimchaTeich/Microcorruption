@@ -47,7 +47,7 @@ You can also see it in the code itself in the next picture, and also deduce it o
 
 * Prints the sentence: "what's the password?"
     * interrupt 0x0 - print one char
-    * "what's the password?" saves at address 0x4520.
+    * "what's the password?" saved at address 0x4520.
     * print char by char in loop.
 * Prints '\n'
     * interrupt 0x0
