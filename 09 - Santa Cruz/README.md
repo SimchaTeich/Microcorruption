@@ -59,6 +59,42 @@ Summary:
 * If one of the above tests fails, the program will terminate immediately without reaching ret at the end of the function.
 
 
+That is, we would like to somehow, using the username and password, overwrite the value back to `main` so that it contains the address to `unlock_door` and also leave the value 0x0 in its place.
+
+Let's look at the stack before entering the username:
+
+<img src="./9.7.png">
+
+* 0x8 - minimum password length
+* 0x10 - maximum password lenght
+* 0x0 - the value for detecting overwriting
+* 0x4440 - return value to the `main`
+
+Technically, both the username and password can be long enough to overwrite the return value value (up to 0x63 bytes).
+
+But we will note that the input that will overwrite the return value cannot also be the one that will "leave" the value 0x0 in its place. Because otherwise `strcpy` will not copy the entire input up to the return value but will stop at the same 0x0..
+
+
+Therefore, we can do this:
+* The username will be long enough to overwrite the return value.
+* The password will be long enough so that it ends with 0x0 at the end of its string exactly where the 0x0 of the test is located.
+* In order not to fail the maximum password length test, the username will not only overwrite the return value but also the maximum length of the password.
+
+For example, this is what the stack will look like when the username is `0101010101010101010101010101010101081201010101010101010101010101010101010101010101014a44`:
+
+<img src="./9.8.png">
+
+* 0x12 - maximum password lenght AFTER OVERWRITING
+* 0x1 - The value 0x0 was overwrite and became something else. Will be fixed in next input 
+* 0x444a - address of `unlock_door`
+
+Now, we will enter the following password: `020202020202020202020202020202020200`. So that its last character will be 0x0 exactly where it should be. And it will match the "new" length that was changed exactly for this purpose in the previous input.
+
+<img src="./9.9.png">
+
+* 0x0 - fixed.
+
+With these inputs, the three tests passed successfully. And although in any case it will be printed to the user that the username and password are incorrect, but when we reach the ret command at the end of the `login` function and jump to `unlock_door`.
 
 
 ## The cracking input (as bytes)
