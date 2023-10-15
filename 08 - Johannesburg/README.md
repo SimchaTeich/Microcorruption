@@ -40,7 +40,7 @@ Therefore, all we will have to do is make sure that in the 0x11 byte that we wil
 
 In this way, it will be printed on the screen that the password is incorrect - but this way we will get to the ret command which will jump to an interrupt that will unlock the door.
 
-So, the adddress of `INT` is 0x4446 and we can't enter the value 0x0 because of the `strcpy` function. From here, the creation of the cracking input is easy.
+So, the adddress of `unlock_door` is 0x4446 and we can't enter the value 0x0 because of the `strcpy` function. From here, the creation of the cracking input is easy.
 
 ## The cracking input (as bytes)
 ```
