@@ -60,7 +60,6 @@ In addition, we will give it as a parameter the value 0x7f at a distance of 0x2 
 
 note: don't forget the little endian.
 
-
 ## The cracking input (as bytes)
 ```
 00000000000000000000000000000000324500007f00
