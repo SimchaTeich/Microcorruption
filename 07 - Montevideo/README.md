@@ -4,13 +4,13 @@
 Just like the Whitehorse challenge with a small addition - the `strcpy` function.
 
 ## The way
-The main function only contains a call to login. Therefore we will now examine login.
+The function `main` only contains a call to `login`. Therefore we will now examine login.
 
 <img src="./7.1.png">
 
 *Explain:*
 
-* The login stack frame contains 0x10 bytes.
+* The `login` stack frame contains 0x10 bytes.
     * 0xfff0 == -0x10
 * Accepting input from the user
     * up to 0x30 bytes long.
