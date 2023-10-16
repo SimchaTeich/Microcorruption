@@ -66,17 +66,41 @@ Summary:
 We want to overwrite the return value to `main` with the address of `unlock_door` (0x444c) and pass all the correctness checks of the lengths.
 
 
+Let's pay attention to the test process from the end to the beginning:
+
+* The program ends immediately if the lower byte of register _r15_, which contains the size of the username and password together, is large equal to 0x21.
+     * If _r15_ will be 0x0100 for example, we will pass the test successfully!
+
+* The program limits the input size of the password to be: (0x001f - len(password)) & 0x01ff
+     * If the username size is 0x20, the password size will be limited to 0x1ff.
+     * We cannot let username be longer because then it will fail the length check.
+   
+* So for _r15_ to be 0x0100, the size of the password should be 0xe0
+     * because 0x20 + 0xe0 = 0x100
 
 
+Let's look at the stack before entering the username:
+
+<img src="./10.5.png"></img>
+* 0x4440 - return value back to `main`.
+
+And now we will see the memory when we enter the following input as username (run the code section in Python interpreter):
 
 ```python
-username = '11' * 0x20
+'11' * 0x20
 ```
+
+<img src="./10.6.png"></img>
+
+We will use the password input whose total length is 0xe0 bytes to overwrite the return value to be the address of unlock_door (0x444c):
 
 ```python
 password = '22222222' + ' 4c44 ' + '22' * (0xe0 - 0x6)
 ```
 
+<img src="./10.7.png"></img>
+
+And that's how we managed to bypass the safety mechanism, put in a long input that will override the return value and open the door.
 
 ## The cracking input (as bytes)
 ```
