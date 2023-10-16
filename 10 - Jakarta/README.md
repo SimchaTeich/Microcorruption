@@ -34,7 +34,8 @@ In function `main` there is not too much except a call to `login`. So we will ex
     * this is not a mistake, indeed the length of the username is checked and an output is printed that talks about the password.
 
 6. Get passwrord from user
-    * up to 0x1f - len(username) bytes ⚠️<font color='red'>BAG IS HERE!</font>⚠️
+    * up to 0x1f - len(username) bytes ⚠️<span style="color : red">BAG IS HERE!</span>⚠️
+    ![#f03c15]
     * enters memory at address 0x2402. 
 
 ```python
