@@ -1,13 +1,16 @@
 # Jakarta - 40 points
  
 ## The idea
-
+Bypassing the input length verification mechanism using a game of byte addition sums.
 
 ## The way
 
 
 ```python
 username = '11' * 0x20
+```
+
+```python
 password = '22222222' + ' 4c44 ' + '22' * (0xe0 - 0x6)
 ```
 
