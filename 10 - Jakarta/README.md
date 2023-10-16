@@ -95,7 +95,7 @@ And now we will see the memory when we enter the following input as username (ru
 We will use the password input whose total length is 0xe0 bytes to overwrite the return value to be the address of `unlock_door` (0x444c):
 
 ```python
-'22222222' + ' 4c44 ' + (0xe0 - 0x6) * '22'
+'2222' + '2222' + '4c44' + (0xe0 - 0x6) * '22'
 ```
 
 <img src="./10.7.png"></img>
