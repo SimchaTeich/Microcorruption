@@ -26,7 +26,7 @@ In function `main` there is not too much except a call to `login`. So we will ex
     * using `strcpy`
 
 4. Verification that the length of the username does not exceed 0x1f
-    * 0x20 - 0x1 = 0x1f. password length without 0x0 at the end..
+    * 0x20 - 0x1 = 0x1f. username length without 0x0 at the end..
     * if the test failed, we will continue to 5.
     * otherwise, we will skip 5.
 
@@ -34,9 +34,36 @@ In function `main` there is not too much except a call to `login`. So we will ex
     * this is not a mistake, indeed the length of the username is checked and an output is printed that talks about the password.
 
 6. Get passwrord from user
-    * up to 0x1f - len(username) bytes ⚠️<span style="color : red">BAG IS HERE!</span>⚠️
-    ![#f03c15]
-    * enters memory at address 0x2402. 
+    * up to 0x1f - len(username) bytes ⚠️
+    * enters memory at address 0x2402.
+
+7. Copying the password to the top of the stack after the username
+    * using `strcpy`
+
+8. Calculation of the total length of the username and password
+    * _r15_ contains the len(username + password)
+
+9. Verification that the length of the username and the password together does not exceed 0x1f
+    * 0x20 - 0x1 = 0x1f. username+password length without 0x0 at the end of the password.
+    * if the test failed, we will continue to 10.
+    * otherwise, we will skip 10.
+
+10. Printing to the screen that the password is too long, and the end of the entire program
+
+11. Checking that the username and password are correct
+    * We have no way of knowing the login details so we will always fail and skip opening the door.
+
+
+Summary:
+* Receiving a username and checking its length
+     * if it is too long, the program will end
+* Receiving a password and checking the total length of the username and password
+     * if it is too long, the program will end
+* Checking correctness of username and password
+     * always fail, we will skip opening the door and reach the `login` ret command.
+
+
+
 
 ```python
 username = '11' * 0x20
