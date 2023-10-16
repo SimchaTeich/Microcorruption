@@ -5,6 +5,10 @@ Bypassing the input length verification mechanism using a game of byte addition 
 
 ## The way
 
+<img src="./10.3.png"></img>
+<img src="./10.4.png"></img>
+
+
 
 ```python
 username = '11' * 0x20
