@@ -63,6 +63,10 @@ Summary:
      * always fail, we will skip opening the door and reach the `login` ret command.
 
 
+We want to overwrite the return value to `main` with the address of `unlock_door` (0x444c) and pass all the correctness checks of the lengths.
+
+
+
 
 
 ```python
