@@ -80,7 +80,7 @@ Therefore, we can do this:
 * The password will be long enough so that it ends with 0x0 at the end of its string exactly where the 0x0 of the test is located.
 * In order not to fail the maximum password length test, the username will not only overwrite the return value but also the maximum length of the password.
 
-For example, this is what the stack will look like when the username is `0101010101010101010101010101010101081201010101010101010101010101010101010101010101014a44`:
+For example, this is what the stack will look like when the username is `1111111111111111111111111111111111 08 12 1111111111111111111111111111111111111111111111 4a44`:
 
 <img src="./9.8.png">
 
@@ -88,7 +88,7 @@ For example, this is what the stack will look like when the username is `0101010
 * 0x1 - The value 0x0 was overwrite and became something else. Will be fixed in next input 
 * 0x444a - address of `unlock_door`
 
-Now, we will enter the following password: `020202020202020202020202020202020200`. So that its last character will be 0x0 exactly where it should be. And it will match the "new" length that was changed exactly for this purpose in the previous input.
+Now, we will enter the following password: `2222222222222222222222222222222222 00`. So that its last character will be 0x0 exactly where it should be. And it will match the "new" length that was changed exactly for this purpose in the previous input.
 
 <img src="./9.9.png">
 
@@ -99,8 +99,8 @@ With these inputs, the three tests passed successfully. And although in any case
 
 ## The cracking input (as bytes)
 ```
-0101010101010101010101010101010101081201010101010101010101010101010101010101010101014a44
+1111111111111111111111111111111111 08 12 1111111111111111111111111111111111111111111111 4a44
 ```
 ```
-020202020202020202020202020202020200
+2222222222222222222222222222222222 00
 ```
