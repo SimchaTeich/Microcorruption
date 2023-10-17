@@ -70,7 +70,7 @@ Note: there is no need to worry about a specific amount of characters before %n,
 The following code constructs the malicious input according to the above requirements:
 
 ```python
-('\x12\x42' + '%x' + '%n').encode().hex()
+(b'\x12\x42' + b'%x' + b'%n').hex()
 ```
 
 Stack memory:
