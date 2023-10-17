@@ -19,17 +19,18 @@ Let's look at function `main`:
 
 2. Copy user input from 0x2400 into the stack
     * copy to 0x420c, the top of the stack.
+    * using `strcpy`
 
 3. Prints the user input
     * using `printf`
 
 4. Checking the correctness of the input
-    * using `conditional_unlock_door` that interrupt.
+    * using `conditional_unlock_door` that using interrupt.
     * we cant guess the right input, therefore the function will always return 0x0 to us.
     * so always jump to stage 6
 
 5. Prints that access granted
-    * note: We will never get here.
+    * note: we will never get here.
     * note: if we came here, no door would open, despite the fine print.
 
 6. Prints that input is incorrect.
@@ -72,9 +73,9 @@ Address of value 0x007e is 0x44c8. so, all that's left to do is use printf to wr
 The string that will break the door will contain 3 parts:
 * %n at the end
 * its beginning will consist of the bytes of the address 0x44c8 (0xc8 and 0x44) to which we want to write.
-* we would like the value 0x7f to be written to the specific memory. therefore we will need another 0x7f-0x2 random bytes int the middle, sitting before the %n.
+* we would like the value 0x7f to be written to the specific memory. therefore we will need another 0x7f-0x2 random bytes in the middle, sitting before the %n.
 
-Note: unlike the Addis Ababa challenge, this time the string from the user sits at the top of the stack at the moment before the call to printf (without 2 separating bytes). therefore there is no need to add any %x to match the parameter injected for %n, aka the value 0x44c8.
+Note: unlike the Addis Ababa challenge, this time the string from the user sits at the top of the stack at the moment before the call to `printf` (without 2 separating bytes). therefore there is no need to add any %x to match the parameter injected for %n, aka the value 0x44c8.
 
 ### Illustration:
 
