@@ -87,8 +87,13 @@ The parameters injected into the stack to exploit printf:
 * `0000` is parameter of `%x`
 * `1242` is parameter of `%n` - the exploit is here.
 
+The stack immediately after printf:
 
+<img src="./11.4.png"></img>
 
+* *(0x4212) != 0x0
+
+Bingo.
 
 ## The cracking input (as bytes)
 ```
