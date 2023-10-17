@@ -1,7 +1,7 @@
 # Algiers - 100 points
  
 ## The idea
-Exploit `malloc` & `free` by heap overflow.
+Exploit `malloc` & `free` by Heap overflow.
 
 ## The way
 
@@ -20,10 +20,6 @@ The following code constructs the malicious input according to the above require
 ().hex()
 ```
 
-heap memory:
-
-
-Bingo.
 
 ## The cracking input (as bytes)
 ```
