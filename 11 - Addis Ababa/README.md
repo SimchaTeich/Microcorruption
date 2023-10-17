@@ -1,7 +1,7 @@
 # Addis Ababa - 50 points
  
 ## The idea
-The weakness of printf
+The weakness of printf - change of control value
 
 ## The way
 Black box testing tells us that the input to unlock is username and password separated by colons.
@@ -80,7 +80,7 @@ Stack memory:
 * `8044` - 0x4480 is return value to `main` after `printf`
 * `1442` - 0x4214 is pointer to string to printing (i.e. pointer to user input string)
 * `0000` - This is the control value that needs to be changed
-* `1242 2578 2563` - the input string `\x12\x42%x%n` as bytes
+* `1242 2578 256e` - the input string `\x12\x42%x%n` as bytes
 
 The parameters injected into the stack to exploit printf:
     
