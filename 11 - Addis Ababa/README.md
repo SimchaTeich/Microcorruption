@@ -25,6 +25,7 @@ Let's look at function `main`:
 3. Checking the correctness of the input
     * using `test_password_valid` that using interupt so we cant guess the password
     * the function will always return 0 for us
+    * result move from _r15_ to 0x4212.
     * so, always at this point: *(0x4212) == 0x0
 
 4. Printing the input from the user to the screen
@@ -32,9 +33,7 @@ Let's look at function `main`:
     * so far in the other challenges we have used `puts`, So the use of `printf` raises suspicion...
 
 5. Checking the result of `test_password_valid`
-    * at adress 0x4212
-    * the result should always be 0 (read step 3 again)
-    * so we always jump to stage 7
+    * always jump to stage 7 (read step 3 again)
 
 6. Unlock the door.
 
