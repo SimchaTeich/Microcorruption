@@ -40,6 +40,16 @@ Let's look at function `main`:
 7. Prints that the input is incorrect.
 
 
+Summary:
+* Before printing the input from the user to the screen, the stack contains two things:
+    * 2 bytes (address 0x4212) whose total value is 0 if the input is incorrect
+    * the input from the user immediately after them (address 0x4214)
+* After printing, these 2 bytes are checked
+    * If they are 0, we lost
+    * Otherwise, the door opens
+* Conclusion: we will have to use `printf` to write a value other than 0 to those 2 bytes - at  address 0x4212
+
+
 
 
 ## The cracking input (as bytes)
