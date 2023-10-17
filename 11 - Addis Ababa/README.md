@@ -49,7 +49,7 @@ Let's look at function `main`:
     * Otherwise, the door opens
 * Conclusion: we will have to use `printf` to write a value other than 0 to those 2 bytes - at  address 0x4212
 
-### How to exploit
+### How to exploit:
 
 So far I have known the weakness of printf in the way the stack can be printed (from top to bottom, i.e. from low to high addresses). A check on Google reveals to me that it is also possible to write to memory using %n, and the form of exploitation is the same.
 
@@ -97,5 +97,5 @@ Bingo.
 
 ## The cracking input (as bytes)
 ```
-1242 2578 2563
+1242 2578 256e
 ```
