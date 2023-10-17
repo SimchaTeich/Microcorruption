@@ -86,10 +86,23 @@ The following code constructs the malicious input according to the above require
 
 Stack memory:
 
+<img src="12.5.png"></img>
 
-The stack immediately after printf:
+* `7a44` - 0x447a is return value to `main` after `printf`
+* `0c42` - 0x44c0 is pointer to input string, move as parameter to `printf`
+* all the rest - the malicious input as bytes.
+    * `c844` - 0x44c8, an address to which we will write
+    * `256e`- the string %n as bytes.
 
+Let's see the code section after the printf:
 
+<img src="./12.6.png"></img>
+
+You can see that the right place has been overwrited, now we can clearly see in memory what was overwrited and with what value:
+
+<img src="./12.7.png"></img>
+
+Bingo.
 
 ## The cracking input (as bytes)
 ```
