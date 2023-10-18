@@ -120,12 +120,12 @@ Let's see the Heap and the Stack before inserting the inputs:
     * sitting at address 0x439a.
     * we want to overwrite it to be the value 0x4564 which is the address of `unlock_door`.
 
+***Let's put together everything we know so far:***
+
 * If we refer to 0x4440 as "chunk size", then we will find that this "chunk" was released because the low bit is 0.
 * Therefore if this "chunk" will be the prev of the green when `free` is activated on it, then according to `free` the total size of the green will be added to the value 0x4440.
      * We would like this sum to be 0x4564. (address of `unlock_door`)
      * So we will override the size of the green to be 0x11e (0x4564 - 0x4440 - 0x6).
-
-***Let's put together everything we know so far:***
 
 * But, remember that afterwards the prev of the green (which is the "chunk" we faked) will be united again with the next of the green.
      * Because of the value 0x1f9c, which is the size of the next of the green. And its low bit is equal to 0.
