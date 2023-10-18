@@ -105,16 +105,26 @@ The idea behind the function is very simple. After it marks the part to be relea
 
 ### How to exploit:
 
-### Illustration:
+Let's see the Heap and the Stack before inserting the inputs:
 
-The following code constructs the malicious input according to the above requirements:
+<img src="./13.3.png"><img>
 
-```python
-().hex()
-```
+* blue - memory for first input. meta-data and buffer.
+* green - memory for second input. meta-data and buffer.
+    * `0824` - 0x2480, the prev of green.
+    * `3424` - 0x2434, the next of green.
+* `9c1f` - 0x9c1f, the size of next of green.
+    * the important thing here is only the low bit that is turned off, and we will refer to that later.
+* `4044` - 0x4440, the return value back to `main`.
+    * sitting at address 0x439a.
+    * we want to overwrite it to be the value 0x4564 which is the address of `unlock_door`.
+
 
 
 ## The cracking input (as bytes)
 ```
-
+00000000000000000000000000000000 9643 3424 1e01
+```
+```
+00000000000000000000000000000000 1e24 0824 0100
 ```
