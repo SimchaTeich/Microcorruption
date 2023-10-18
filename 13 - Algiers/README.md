@@ -4,18 +4,21 @@
 Exploit `malloc` & `free` by Heap overflow.
 
 ## The way
+
+### Explain the `login`:
+
 A black box test reveals to us that the user can enter 2 inputs.
 In function `main` there is only a call to `login`. So let's look at the `login`:
 
 <img src="./13.1.png"></img>
 
-
-### Explain the `login`:
 1. 
 
 
 
-### Summary:
+### Summary of `login`:
+
+### Explain the `free`:
 
 So, we needs to exploit `free` by heap overflow.
 Let's look at the function:
@@ -23,8 +26,6 @@ Let's look at the function:
 <img src="./13.2.png"></img>
 
 
-
-### Explain the `free`:
 
 From trial and error I was able to understand that the heap management is realized through a linked list. But I think the right way to explain it without "handwaving" is to really reverse it. After a whole day (yes..) you can see in the c code the structure of the node, and the code of `free`:
 
@@ -100,7 +101,7 @@ So, there are 4 options:
     * the prev of the next stay the current address.
     
 
-### Summary:
+### Summary of `free`:
 The idea behind the function is very simple. After it marks the part to be released as released, it aims to unite it with the segments adjacent to it if they are also released, when the aspiration is to unite from top to bottom.
 
 ### How to exploit:
