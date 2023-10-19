@@ -72,9 +72,7 @@ typedef struct meta
     short size;         // Note: the last bit is the malloc flag.
 } meta;
 ```
-```c
-
-#define META_SIZE 0x6
+<!-- #define META_SIZE 0x6
 
 void free(void *addr)
 {
@@ -104,6 +102,36 @@ void free(void *addr)
     if(addr.next->size & 0x1 != 1)
     {
         // r13 = addr.next->size + addr.size + 6
+        addr->size += (addr->next->size + META_SIZE);
+        addr->next = addr->next->next;
+        addr->next->prev = addr;
+    }
+
+    return;
+}-->
+
+```c
+
+#define META_SIZE 0x6 // 0x6 == sizeof(meta)
+
+void free(void *addr)
+{
+    addr = (meta*)((char*)addr - META_SIZE);
+    addr->size &= 0xfffe; // turn off the malloc flag
+
+    // check if prev is released
+    if(addr->prev->size & 0x1 != 1)
+    {   
+        addr->prev->size += (META_SIZE + addr->size);
+        addr->prev->next = addr->next;
+        addr->next->prev = addr->prev;
+        
+        addr = addr->prev;
+    }
+
+    // check if next is released
+    if(addr.next->size & 0x1 != 1)
+    {
         addr->size += (addr->next->size + META_SIZE);
         addr->next = addr->next->next;
         addr->next->prev = addr;
