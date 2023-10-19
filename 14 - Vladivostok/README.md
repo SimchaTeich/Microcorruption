@@ -522,7 +522,7 @@ The following code snippet contains the functions relevant to the exercise while
 
 * Function `aslr_main`:
     * calls to `_aslr_main`
-    * it means there is return value here on the stack. ⚠️
+    * it means that there is return value here on the stack. ⚠️
 
 * Function `_aslr_main`:
     * push something with 0x4 bytes to the stack
