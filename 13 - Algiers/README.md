@@ -12,11 +12,44 @@ In function `main` there is only a call to `login`. So let's look at the `login`
 
 <img src="./13.1.png"></img>
 
-1. 
+1. Memory allocation
+    * 0x10 bytes
+    * using `malloc`
+
+2. Memory allocation
+    * 0x10 bytes
+    * using `malloc`
+
+3. Get the username
+    * up to 0x30 bytes
+
+4. Get the password
+    * up to 0x30 bytes
+
+5. Checking the correctness of the inputs
+    * as usual, we will not be able to guess the input
+    * so it will always fail and return 0
+    * so it will always skip stage 6
+
+6. Unlock the door
+    * we will never get here.
+
+7. Release the second memory allocation
+
+8. Release the first memory allocation
 
 
+### Conclusions from `login`:
+* The `login` is called from `main`, so we will probably have to overwrite the return value somehow.
 
-### Summary of `login`:
+* The manipulation we can perform should be related to the fact that more input can be inserted than allocated.
+    * in each allocation 0x10 bytes are allocated but 0x30 bytes can enter.
+    * so we can overwrite the metadata of the allocations on the heap.
+* direct overwrite of a return value is not possible immediately upon entering the input
+    * so we note that the only thing that can have an effect and that we can use is the `free` function.
+
+* Let's explore the memory release operation. it will be fun.
+
 
 ### Explain the `free`:
 
