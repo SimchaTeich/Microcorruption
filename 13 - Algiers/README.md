@@ -1,7 +1,7 @@
 # Algiers - 100 points
  
 ## The idea
-Exploit `malloc` & `free` by Heap overflow.
+Exploit `free` by Heap overflow.
 
 ## The way
 
