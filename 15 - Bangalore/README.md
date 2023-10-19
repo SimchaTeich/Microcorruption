@@ -82,6 +82,21 @@ It's time to explore what it does.
 
 ***Explain the `set_up_protection`:***
 
+<img src="./15.7.png"></img>
+
+1. Memory marking 0x0 - 0xff for execution only.
+    * because of function 0010 `__trap_interrupt`
+
+2. Memory marking 0x100 - 0x43ff for writing only.
+    * everything before the code segment
+
+3. Memory marking 0x4400 - 0xffff for execution only.
+    * all the code segment and the rest.
+
+4. Enable these markings to be valid.
+    * or something like that. It's not important for this challenge anyway.
+
+Therefore, we could not run code where we wrote it. And so we would like to make the location of the injected code executable memory.
 
 ### How to exploit:
 
