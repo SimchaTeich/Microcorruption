@@ -527,7 +527,7 @@ The following code snippet contains the functions relevant to the exercise while
 * Function `_aslr_main`:
     * push something with 0x4 bytes to the stack
     * allocate 0x8 bytes on the stack
-        * so from the top of the stack untli the return value there is 0xc bytes.
+        * so from the top of the stack until the return value there is 0xc bytes.
     * insert new location of `printf` address 2 bytes after the top of the stack ⚠️
     * overwrite the original code section.
     * get the username
