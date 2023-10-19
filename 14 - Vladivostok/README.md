@@ -517,7 +517,7 @@ The following code snippet contains the functions relevant to the exercise while
 ### Summary of program operation: ###
 * Function `main`:
     * copies the code segment to a random location in memory
-    * also moves the cartridge to a random location
+    * also moves the stack locaion to a random location
     * call to `aslr_main`
 
 * Function `aslr_main`:
