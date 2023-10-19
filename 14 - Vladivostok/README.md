@@ -607,7 +607,7 @@ def generate_malicious_input(curr_printf):
  
     # remove the '0x'
     curr__INT = hex(curr__INT)[2:]
-
+ 
     # remember the little endian...
     curr__INT = curr__INT[2:] + curr__INT[:2]
  
