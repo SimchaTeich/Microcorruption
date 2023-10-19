@@ -178,11 +178,11 @@ Let's see the Heap and the Stack before inserting the inputs:
 * The overriding of the metadata that belongs to green is done with the input of the username: `00000000000000000000000000000000 9643 3424 1e01`.
 * The overriding of the metadata belonging to the next of green is done with the input of the password: `000000000000000000000000000000000 1e24 0824 0100`
 
-This is how the memory looks like just after the first `free`:
+This is how the memory looks like just before the first `free`:
 
 <img src="./13.4.png"><img>
 
-This is what the memory looks like after `free`:
+This is how the memory looks like just after the first `free`:
 
 <img src="./13.5.png"><img>
 
