@@ -72,7 +72,10 @@ typedef struct meta
     short size;         // Note: the last bit is the malloc flag.
 } meta;
 ```
-<!-- #define META_SIZE 0x6
+<!-- 
+// this code contains comments about the reverse procces.
+
+#define META_SIZE 0x6
 
 void free(void *addr)
 {
@@ -108,7 +111,8 @@ void free(void *addr)
     }
 
     return;
-}-->
+}
+-->
 
 ```c
 
