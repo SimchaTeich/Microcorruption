@@ -145,8 +145,8 @@ Let's see the Heap and the Stack before inserting the inputs:
 
 <img src="./13.3.png"><img>
 
-* blue - memory for first input. meta-data and buffer.
-* green - memory for second input. meta-data and buffer.
+* blue - memory for first input. metadata and buffer.
+* green - memory for second input. metadata and buffer.
     * `0824` - 0x2480, the prev of green.
     * `3424` - 0x2434, the next of green.
 * `9c1f` - 0x9c1f, the size of next of green.
