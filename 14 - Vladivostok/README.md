@@ -545,8 +545,8 @@ The following code snippet contains the functions relevant to the exercise while
 ### How to exploit: ###
 
 We will put together what we know and pay attention to ⚠️:
-* In the password input we can overwrite the return address to `aslr_main`
-     * password[0x8] & password[0x9] will be the address for `INT'
+* With the password input we can overwrite the return address to `aslr_main`
+     * password[0x8] & password[0x9] will be the address for `INT`
      * password[0xc] & password[0xd] will be the value 0x007f to open the door.
 * But because of ASLR, we don't know the current address of `_INT`.
 * So we will notice that looking at the stack, just before the call to `printf` for the username:
