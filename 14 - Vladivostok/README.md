@@ -122,7 +122,7 @@ The following code snippet contains the functions relevant to the exercise while
 456c:  0f4e           mov	r14, r15
 456e:  8f10           swpb	r15
 4570:  024f           mov	r15, sr
-4572:  32d0 0080      bis	#0x8000, sr             ; from line 114 - putchar('\n').
+4572:  32d0 0080      bis	#0x8000, sr             ; putchar('\n').
 4576:  b012 1000      call	#0x10
 457a:  3241           pop	sr
 457c:  3152           add	#0x8, sp
@@ -137,7 +137,7 @@ The following code snippet contains the functions relevant to the exercise while
 458c:  0f4e           mov	r14, r15
 458e:  8f10           swpb	r15
 4590:  024f           mov	r15, sr
-4592:  32d0 0080      bis	#0x8000, sr                      ; from line 114 - putchar('>')
+4592:  32d0 0080      bis	#0x8000, sr                      ; putchar('>')
 4596:  b012 1000      call	#0x10
 459a:  3241           pop	sr
 459c:  3152           add	#0x8, sp
@@ -168,7 +168,7 @@ The following code snippet contains the functions relevant to the exercise while
 45cc:  0f4d           mov	r13, r15
 45ce:  8f10           swpb	r15
 45d0:  024f           mov	r15, sr
-45d2:  32d0 0080      bis	#0x8000, sr   ; getsn, 8 bytes into addr 0x2426. - from line 161
+45d2:  32d0 0080      bis	#0x8000, sr   ; getsn, 8 bytes into addr 0x2426.
 45d6:  b012 1000      call	#0x10
 45da:  3241           pop	sr
 45dc:  3152           add	#0x8, sp
@@ -231,7 +231,7 @@ The following code snippet contains the functions relevant to the exercise while
 4676:  0f4e           mov	r14, r15
 4678:  8f10           swpb	r15
 467a:  024f           mov	r15, sr
-467c:  32d0 0080      bis	#0x8000, sr                       ; from line 225 - putchar('\n').
+467c:  32d0 0080      bis	#0x8000, sr                       ; putchar('\n').
 4680:  b012 1000      call	#0x10
 4684:  3241           pop	sr
 4686:  3152           add	#0x8, sp
@@ -249,7 +249,7 @@ The following code snippet contains the functions relevant to the exercise while
 469c:  0f4d           mov	r13, r15
 469e:  8f10           swpb	r15
 46a0:  024f           mov	r15, sr
-46a2:  32d0 0080      bis	#0x8000, sr; getsn, 0x14 bytes into where sp is.
+46a2:  32d0 0080      bis	#0x8000, sr       ; getsn, 0x14 bytes into where sp is.
 46a6:  b012 1000      call	#0x10
 46aa:  3241           pop	sr
 46ac:  3152           add	#0x8, sp
@@ -265,7 +265,7 @@ The following code snippet contains the functions relevant to the exercise while
 46be:  0f4d           mov	r13, r15
 46c0:  8f10           swpb	r15
 46c2:  024f           mov	r15, sr
-46c4:  32d0 0080      bis	#0x8000, sr ; check password. INT(0x7e)
+46c4:  32d0 0080      bis	#0x8000, sr        ; check password. INT(0x7e)
 46c8:  b012 1000      call	#0x10
 46cc:  3241           pop	sr
 46ce:  3152           add	#0x8, sp
