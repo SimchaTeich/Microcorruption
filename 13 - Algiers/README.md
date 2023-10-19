@@ -35,8 +35,10 @@ In function `main` there is only a call to `login`. So let's look at the `login`
     * we will never get here.
 
 7. Release the second memory allocation
+    * using `free`
 
 8. Release the first memory allocation
+    * using `free`
 
 
 ### Conclusions from `login`:
