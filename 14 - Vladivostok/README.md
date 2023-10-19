@@ -21,7 +21,7 @@
 4456:  b012 e849      call	#0x49e8 <_memcpy>
 445a:  3150 0600      add	#0x6, sp
 
-; calculate the address of the new loccation of <_aslr_main>
+; calculate the address of the new loccation of <aslr_main>
 445e:  0f4a           mov	r10, r15
 4460:  3ff0 fe0f      and	#0xffe, r15
 4464:  0e4b           mov	r11, r14
@@ -313,7 +313,7 @@
 475c <aslr_main>
 475c:  0e4f           mov	r15, r14
 475e:  3e50 8200      add	#0x82, r14
-4762:  8e12           call	r14
+4762:  8e12           call	r14        ; call to the new location of <_aslr_main>
 4764:  32d0 f000      bis	#0xf0, sr
 4768:  3041           ret
 ;-------------------------------------------
@@ -488,17 +488,6 @@
 48e8:  3b41           pop	r11
 48ea:  3041           ret
 ;-------------------------------------------
-48ec <_INT>
-48ec:  1e41 0200      mov	0x2(sp), r14
-48f0:  0212           push	sr
-48f2:  0f4e           mov	r14, r15
-48f4:  8f10           swpb	r15
-48f6:  024f           mov	r15, sr
-48f8:  32d0 0080      bis	#0x8000, sr
-48fc:  b012 1000      call	#0x10
-4900:  3241           pop	sr
-4902:  3041           ret
-;-------------------------------------------
 4904 <INT>
 4904:  0c4f           mov	r15, r12
 4906:  0d12           push	r13
@@ -514,167 +503,6 @@
 491e:  3241           pop	sr
 4920:  3152           add	#0x8, sp
 4922:  3041           ret
-;-------------------------------------------
-4924 <putchar>
-4924:  0e4f           mov	r15, r14
-4926:  0d43           clr	r13
-4928:  0d12           push	r13
-492a:  0e12           push	r14
-492c:  0d12           push	r13
-492e:  0012           push	pc
-4930:  0212           push	sr
-4932:  0f4d           mov	r13, r15
-4934:  8f10           swpb	r15
-4936:  024f           mov	r15, sr
-4938:  32d0 0080      bis	#0x8000, sr
-493c:  b012 1000      call	#0x10
-4940:  3241           pop	sr
-4942:  3152           add	#0x8, sp
-4944:  0f4e           mov	r14, r15
-4946:  3041           ret
-;-------------------------------------------
-4948 <getchar>
-4948:  2183           decd	sp
-494a:  0d43           clr	r13
-494c:  1e43           mov	#0x1, r14
-494e:  0c41           mov	sp, r12
-4950:  0d12           push	r13
-4952:  0c12           push	r12
-4954:  0e12           push	r14
-4956:  0012           push	pc
-4958:  0212           push	sr
-495a:  0f4e           mov	r14, r15
-495c:  8f10           swpb	r15
-495e:  024f           mov	r15, sr
-4960:  32d0 0080      bis	#0x8000, sr
-4964:  b012 1000      call	#0x10
-4968:  3241           pop	sr
-496a:  3152           add	#0x8, sp
-496c:  6f41           mov.b	@sp, r15
-496e:  8f11           sxt	r15
-4970:  2153           incd	sp
-4972:  3041           ret
-;-------------------------------------------
-4974 <getsn>
-4974:  0d4f           mov	r15, r13
-4976:  2c43           mov	#0x2, r12
-4978:  0e12           push	r14
-497a:  0d12           push	r13
-497c:  0c12           push	r12
-497e:  0012           push	pc
-4980:  0212           push	sr
-4982:  0f4c           mov	r12, r15
-4984:  8f10           swpb	r15
-4986:  024f           mov	r15, sr
-4988:  32d0 0080      bis	#0x8000, sr
-498c:  b012 1000      call	#0x10
-4990:  3241           pop	sr
-4992:  3152           add	#0x8, sp
-4994:  3041           ret
-4996 <puts>
-4996:  0e4f           mov	r15, r14
-4998:  0c43           clr	r12
-499a:  103c           jmp	$+0x22 <puts+0x26>
-499c:  1e53           inc	r14
-499e:  8d11           sxt	r13
-49a0:  0c12           push	r12
-49a2:  0d12           push	r13
-49a4:  0c12           push	r12
-49a6:  0012           push	pc
-49a8:  0212           push	sr
-49aa:  0f4c           mov	r12, r15
-49ac:  8f10           swpb	r15
-49ae:  024f           mov	r15, sr
-49b0:  32d0 0080      bis	#0x8000, sr
-49b4:  b012 1000      call	#0x10
-49b8:  3241           pop	sr
-49ba:  3152           add	#0x8, sp
-49bc:  6d4e           mov.b	@r14, r13
-49be:  4d93           tst.b	r13
-49c0:  ed23           jnz	$-0x24 <puts+0x6>
-49c2:  0e43           clr	r14
-49c4:  3d40 0a00      mov	#0xa, r13
-49c8:  0e12           push	r14
-49ca:  0d12           push	r13
-49cc:  0e12           push	r14
-49ce:  0012           push	pc
-49d0:  0212           push	sr
-49d2:  0f4e           mov	r14, r15
-49d4:  8f10           swpb	r15
-49d6:  024f           mov	r15, sr
-49d8:  32d0 0080      bis	#0x8000, sr
-49dc:  b012 1000      call	#0x10
-49e0:  3241           pop	sr
-49e2:  3152           add	#0x8, sp
-49e4:  0f4e           mov	r14, r15
-49e6:  3041           ret
-;-------------------------------------------
-49e8 <_memcpy>
-49e8:  1c41 0600      mov	0x6(sp), r12
-49ec:  0f43           clr	r15
-49ee:  093c           jmp	$+0x14 <_memcpy+0x1a>
-49f0:  1e41 0200      mov	0x2(sp), r14
-49f4:  0e5f           add	r15, r14
-49f6:  1d41 0400      mov	0x4(sp), r13
-49fa:  0d5f           add	r15, r13
-49fc:  ee4d 0000      mov.b	@r13, 0x0(r14)
-4a00:  1f53           inc	r15
-4a02:  0f9c           cmp	r12, r15
-4a04:  f523           jnz	$-0x14 <_memcpy+0x8>
-4a06:  3041           ret
-;-------------------------------------------
-4a08 <_bzero>
-4a08:  0d43           clr	r13
-4a0a:  053c           jmp	$+0xc <_bzero+0xe>
-4a0c:  0c4f           mov	r15, r12
-4a0e:  0c5d           add	r13, r12
-4a10:  cc43 0000      mov.b	#0x0, 0x0(r12)
-4a14:  1d53           inc	r13
-4a16:  0d9e           cmp	r14, r13
-4a18:  f923           jnz	$-0xc <_bzero+0x4>
-4a1a:  3041           ret
-;-------------------------------------------
-4a1c <rand>
-4a1c:  0e43           clr	r14
-4a1e:  3d40 2000      mov	#0x20, r13
-4a22:  0e12           push	r14
-4a24:  0e12           push	r14
-4a26:  0d12           push	r13
-4a28:  0012           push	pc
-4a2a:  0212           push	sr
-4a2c:  0f4d           mov	r13, r15
-4a2e:  8f10           swpb	r15
-4a30:  024f           mov	r15, sr
-4a32:  32d0 0080      bis	#0x8000, sr
-4a36:  b012 1000      call	#0x10
-4a3a:  3241           pop	sr
-4a3c:  3152           add	#0x8, sp
-4a3e:  0f4f           mov	r15, r15
-4a40:  3041           ret
-;-------------------------------------------
-4a42 <conditional_unlock_door>
-4a42:  2183           decd	sp
-4a44:  0e4f           mov	r15, r14
-4a46:  3d40 7e00      mov	#0x7e, r13
-4a4a:  0c41           mov	sp, r12
-4a4c:  0c12           push	r12
-4a4e:  0e12           push	r14
-4a50:  0d12           push	r13
-4a52:  0012           push	pc
-4a54:  0212           push	sr
-4a56:  0f4d           mov	r13, r15
-4a58:  8f10           swpb	r15
-4a5a:  024f           mov	r15, sr
-4a5c:  32d0 0080      bis	#0x8000, sr
-4a60:  b012 1000      call	#0x10
-4a64:  3241           pop	sr
-4a66:  3152           add	#0x8, sp
-4a68:  0f43           clr	r15
-4a6a:  2153           incd	sp
-4a6c:  3041           ret
-;-------------------------------------------
-4a6e <_unexpected_>
-4a6e:  0013           reti	pc
 ```
 
 ## The cracking input (as bytes)
