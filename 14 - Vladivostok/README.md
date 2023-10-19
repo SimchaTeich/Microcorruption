@@ -536,7 +536,7 @@ The following code snippet contains the functions relevant to the exercise while
         * using `printf`
     * get the password
         * up to 0x14 bytes.
-        * insert to address that is 4 bytes after the head of the stack
+        * insert into the 4 bytes after the top of the stack.
         * so from the address of password until the return value there is (0xc - 0x4 =) 0x8 bytes. ⚠️
     * check the password
         * allways fail
