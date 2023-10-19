@@ -176,7 +176,7 @@ Let's see the Heap and the Stack before inserting the inputs:
 * The low bit of size of next of the green will be on
     * 0x0001
 * The overriding of the metadata that belongs to green is done with the input of the username: `00000000000000000000000000000000 9643 3424 1e01`.
-* The overriding of the metadata belonging to the green next is done with the input of the password: `000000000000000000000000000000000 1e24 0824 0100`
+* The overriding of the metadata belonging to the next of green is done with the input of the password: `000000000000000000000000000000000 1e24 0824 0100`
 
 This is how the memory looks like just after the first `free`:
 
