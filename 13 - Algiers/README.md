@@ -137,7 +137,7 @@ So, there are 4 options:
     
 
 ### Summary of `free`:
-The idea behind the function is very simple. After it marks the part to be released as released, it aims to unite it with the segments adjacent to it if they are also released, when the aspiration is to unite from top to bottom.
+The idea behind the function is very simple. After it marks the part to be released as released, it aims to unite it with the segments adjacent to it if they are also released, when the aim is to connect them from the top of the pile to the bottom.
 
 ### How to exploit:
 
