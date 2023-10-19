@@ -6,35 +6,6 @@
 ## The way
 
 ```arm
-0010 <__trap_interrupt>
-0010:  3041           ret
-;-------------------------------------------
-4400 <__init_stack>
-4400:  3140 0044      mov	#0x4400, sp
-;-------------------------------------------
-4404 <__low_level_init>
-4404:  1542 5c01      mov	&0x015c, r5
-4408:  75f3           and.b	#-0x1, r5
-440a:  35d0 085a      bis	#0x5a08, r5
-;-------------------------------------------
-440e <__do_copy_data>
-440e:  3f40 0000      clr	r15
-4412:  0f93           tst	r15
-4414:  0724           jz	$+0x10 <__do_clear_bss+0x0>
-4416:  8245 5c01      mov	r5, &0x015c
-441a:  2f83           decd	r15
-441c:  9f4f 704a 0024 mov	0x4a70(r15), 0x2400(r15)
-4422:  f923           jnz	$-0xc <__do_copy_data+0x8>
-;-------------------------------------------
-4424 <__do_clear_bss>
-4424:  3f40 3200      mov	#0x32, r15
-4428:  0f93           tst	r15
-442a:  0624           jz	$+0xe <main+0x0>
-442c:  8245 5c01      mov	r5, &0x015c
-4430:  1f83           dec	r15
-4432:  cf43 0024      mov.b	#0x0, 0x2400(r15)
-4436:  fa23           jnz	$-0xa <__do_clear_bss+0x8>
-;-------------------------------------------
 4438 <main>
 4438:  b012 1c4a      call	#0x4a1c <rand>
 443c:  0b4f           mov	r15, r11
@@ -42,11 +13,15 @@
 4442:  3b50 0060      add	#0x6000, r11
 4446:  b012 1c4a      call	#0x4a1c <rand>
 444a:  0a4f           mov	r15, r10
+
+; copy the code section to random memory
 444c:  3012 0010      push	#0x1000
 4450:  3012 0044      push	#0x4400 <__init_stack>
 4454:  0b12           push	r11
 4456:  b012 e849      call	#0x49e8 <_memcpy>
 445a:  3150 0600      add	#0x6, sp
+
+; calculate the address of the new loccation of <_aslr_main>
 445e:  0f4a           mov	r10, r15
 4460:  3ff0 fe0f      and	#0xffe, r15
 4464:  0e4b           mov	r11, r14
@@ -58,12 +33,6 @@
 4474:  0f4b           mov	r11, r15
 4476:  8d12           call	r13
 ;-------------------------------------------
-4478 <__stop_progExec__>
-4478:  32d0 f000      bis	#0xf0, sr
-447c:  fd3f           jmp	$-0x4 <__stop_progExec__+0x0>
-;-------------------------------------------
-447e <__ctors_end>
-447e:  3040 6e4a      br	#0x4a6e <_unexpected_>
 4482 <_aslr_main>
 4482:  0b12           push	r11
 4484:  0a12           push	r10
@@ -72,6 +41,8 @@
 448a:  3c50 6a03      add	#0x36a, r12
 448e:  814c 0200      mov	r12, 0x2(sp)
 4492:  0e43           clr	r14
+
+; overwrite the code segment
 4494:  ce43 0044      mov.b	#0x0, 0x4400(r14)
 4498:  1e53           inc	r14
 449a:  3e90 0010      cmp	#0x1000, r14
