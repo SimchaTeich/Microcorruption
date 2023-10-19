@@ -74,7 +74,7 @@ And, this is the Stack memory just after the next input `00000000000000000000000
 
 But unfortunately, this is what happens when trying to run the code:
 
-<img src="./15.6.png" width="80%">
+<img src="./15.6.png" width="80%"></img>
 
 So the attempt failed because we tried to run code where we wrote it.
 Remember the call to `set_up_protection` that occurred in the `main` function before `login`?
