@@ -577,6 +577,21 @@ so this will be the second input that cracks this challnge:
 
 **Illustration:**
 
+Inserting the input `25782578` as username, tells us the current address of `printf`:
+
+<img src="./14.4.png" width="80%"></img>
+
+* address of `printf` for now is 0x8c5c
+
+So, this is the address of `_INT`: 0x8dde
+* 0x8c5c + (0x48ec - 0x476a) = 0x8dde
+
+Therefore, all that remains is to insert the following input as pasword: `0000000000000000 de8d 0000 7f00`
+
+<img src="./14.5.png" width="80%"></img>
+
+Drop the mic.
+
 
 ## The cracking input (as bytes)
 ```
