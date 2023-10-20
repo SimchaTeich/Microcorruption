@@ -40,8 +40,8 @@ At first glance, `login` looks suspiciously too easy:
 
 ***First attempt:***
 
-It is very clear here that the return value can and should be overridden.
-But, there is no function in the code segment that can open the door. Not even the well-known `INT`.
+It is very clear here that the return value can and should be overridden.<br />
+But, there is no function in the code segment that can open the door. Not even the well-known `INT`.<br />
 So we will have to inject a code that opens the door and jump to it.
 
 If we investigate in another challenge what the `INT` function does with the parameter 0x7f, we find that the actual code that opens the door looks like this:
@@ -76,8 +76,8 @@ But unfortunately, this is what happens when trying to run the code:
 
 <img src="./15.6.png" width="80%"></img>
 
-So the attempt failed because we tried to run code where we wrote it.
-Remember the call to `set_up_protection` that occurred in the `main` function before `login`?
+So the attempt failed because we tried to run code where we wrote it.<br />
+Remember the call to `set_up_protection` that occurred in the `main` function before `login`?<br />
 It's time to explore what it does.
 
 ***Explain the `set_up_protection`:***
@@ -94,7 +94,7 @@ It's time to explore what it does.
     * all the code segment and the rest.
 
 4. Enable these markings to be valid.
-    * or something like that. It's not important for this challenge anyway.
+    * or something like that.<br />It's not important for this challenge anyway.
 
 Therefore, we could not run code where we wrote it. And so we would like to make the location of the injected code executable memory.
 
@@ -129,7 +129,7 @@ that's what happens:
 
 <img src="./15.10.png" width="80%"></img>
 
-And this happened because the `call` command pushes a return value onto the stack. But since we are inside the stack, it turns out that it is trying to push a value (that is, write) to a place that cannot be written anymore.
+And this happened because the `call` command pushes a return value onto the stack.<br />But since we are inside the stack, it turns out that it is trying to push a value (that is, write) to a place that cannot be written anymore.
 
 So, what can we do now?
 
