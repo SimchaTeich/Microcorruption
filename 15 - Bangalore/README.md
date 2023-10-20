@@ -131,13 +131,24 @@ that's what happens:
 
 And this happened because the `call` command pushes a return value onto the stack. But since we are inside the stack, it turns out that it is trying to push a value (that is, write) to a place that cannot be written anymore.
 
-So, can we do now?
+So, what can we do now?
 
 ### How to exploit:
 
 The second attempt was excellent except for the `call` command, which in our specific case writes into the memory that we defined as executable and not writable.
 
+Well, we can replace the `call #0x10` with `mov #0x10, pc` which is really what we want to do.
 
+```asm
+mov #0xff00, sr
+br #0x0010         ; == mov #0x10, pc
+
+; the bytes of the code after the assembler: 324000ff30401000 
+```
+
+All that remains is to take the input of the second attempt, and replace the injected code with the code above.
+
+Good bye!
 
 ## The cracking input (as bytes)
 ```
