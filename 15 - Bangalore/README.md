@@ -107,7 +107,7 @@ We would like the following steps to happen:
 * Running the injected code.
     * this means overriding the return value from `mark_page_executable` directly into the injected code.
 
-Let's take a look at the mark_page_executable function to see where to jump inside it:
+Let's take a look at the `mark_page_executable` function to see where to jump inside it:
 
 <img src="./15.8.png"></img>
 * `0x44ba` - the address we want to jump to it first.
