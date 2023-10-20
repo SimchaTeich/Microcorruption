@@ -124,7 +124,7 @@ Let's try the next input `00000000000000000000000000000000 ba44 4000 0000 0640 3
 * `0640` - 0x4006, the "ret" from `mark_page_executable` to the injected code.
 * `324000ffb0121000`, the injected code from the first attempt.
 
-But unfortunately, when it execute the `call #0x10` command,
+But unfortunately, when it execute the `call #0x10` command **of the injected code**,
 that's what happens:
 
 <img src="./15.10.png" width="80%"></img>
