@@ -46,7 +46,7 @@ So we will have to inject a code that opens the door and jump to it.
 
 If we investigate in another challenge what the `INT` function does with the parameter 0x7f, we find that the actual code that opens the door looks like this:
 
-```arm
+```asm
 mov #0xff00, sr
 call #0x10
 
