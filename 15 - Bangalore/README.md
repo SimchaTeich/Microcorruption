@@ -119,7 +119,7 @@ Let's try the next input `00000000000000000000000000000000 ba44 4000 0000 0640 3
 <img src="./15.9.png"></img>
 
 * `ba44` - 0x44ba, "ret" from `login` to inside the `mark_page_executable`.
-* `4000` - 0x0044, first parameter to `mark_page_executable`. this is the page number of the injected code to be executible.
+* `4000` - 0x0040, first parameter to `mark_page_executable`. this is the page number of the injected code to be executible.
 * `0000` - 0x0000, the second parameter to `mark_page_executable`.
 * `0640` - 0x4006, the "ret" from `mark_page_executable` to the injected code.
 * `324000ffb0121000`, the injected code from the first attempt.
