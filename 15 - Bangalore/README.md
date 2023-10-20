@@ -98,7 +98,45 @@ It's time to explore what it does.
 
 Therefore, we could not run code where we wrote it. And so we would like to make the location of the injected code executable memory.
 
+***Second attempt:***
+
+We would like the following steps to happen:
+* Receiving input from the user that includes an injected code to open the door
+* Granting permission to the memory that contains the injected code to be executable.
+    * this means overriding the return value to `main` which will jump to `mark_page_executable` instead.
+* Running the injected code.
+    * this means overriding the return value from `mark_page_executable` directly into the injected code.
+
+Let's take a look at the mark_page_executable function to see where to jump inside it:
+
+<img src="./15.8.png"></img>
+* `0x44ba` - the address we want to jump to it first.
+* _r14_ - contains the page number to make executible.
+* we don't have any control on registers, so we needs to insert to the stack the parameters to function (instead of this _push_ commands)
+
+Let's try the next input `00000000000000000000000000000000 ba44 4000 0000 0640 324000ffb0121000`:
+
+<img src="./15.9.png"></img>
+
+* `ba44` - 0x44ba, "ret" from `login` to inside the `mark_page_executable`.
+* `4000` - 0x0044, first parameter to `mark_page_executable`. this is the page number of the injected code to be executible.
+* `0000` - 0x0000, the second parameter to `mark_page_executable`.
+* `0640` - 0x4006, the "ret" from `mark_page_executable` to the injected code.
+* `324000ffb0121000`, the injected code from the first attempt.
+
+But unfortunately, when it execute the `call #0x10` command,
+that's what happens:
+
+<img src="./15.10.png" width="80%"></img>
+
+And this happened because the `call` command pushes a return value onto the stack. But since we are inside the stack, it turns out that it is trying to push a value (that is, write) to a place that cannot be written anymore.
+
+So, can we do now?
+
 ### How to exploit:
+
+The second attempt was excellent except for the `call` command, which in our specific case writes into the memory that we defined as executable and not writable.
+
 
 
 ## The cracking input (as bytes)
