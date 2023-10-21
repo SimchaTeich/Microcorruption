@@ -90,7 +90,7 @@ And now, the user input window came up again.<br />
 Into it we will insert the code injected in Bangalore's solution.
 
 Reminder: this is the code `324000ff30401000`.<br />
-And this is what he does:
+And this is what it does:
 
 ```asm
 ; assembly code that unlocks the door.
