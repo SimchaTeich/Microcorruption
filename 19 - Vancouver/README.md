@@ -84,7 +84,7 @@ Recall the following code from the Lagos challenge:
 ```asm
 ; assembly code that unlock the door.
 mov #0xff00, sr
-br #0x10
+br #0x0010
 ```
 So, <br />
 - The code after assembler is: `324000ff30401000`<br />
