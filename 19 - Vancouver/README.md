@@ -72,7 +72,8 @@ Then, copies from the third part the amount of bytes specified in the second par
 
 Then, actually executing the program from the user.
 
-**For example: The input `8000 02 3041`**: copies the `02` bytes of `3041` into memory at address 0x`8000`
+For example: The input `8000 02 3041`:<br />
+copies the `02` bytes of `3041` into memory at address 0x`8000`
 
 So, what can we do with that?
 
