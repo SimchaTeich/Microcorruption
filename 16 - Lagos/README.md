@@ -59,7 +59,7 @@ Function `main` calls `login`, so maybe we can overwrite a return value.
 We can insert up to 0x200 alphanumeric bytes into the stack only.<br />
 We will note that any overwrite of the return value should have an address whose bytes are alphanumeric.<br />
 In particular, we will notice that there is no address for the function that opens the door.<br />
-And so even if we can use an `INT` address, we cannot pass the parameter 0x007f which consists of non-alphanumeric characters.
+And so even if we can use the `INT` address, we cannot pass the parameter 0x007f which consists of non-alphanumeric characters.
 
 So what can we do?
 
@@ -76,7 +76,7 @@ Let's pay attention to the `getsn` function:
 We can notice that the address 0x4654 consists of alphanumeric bytes, so we can jump to it.<br />
 In this way, we can insert another input into the memory and inject a code that consists of characters that are not alphanumeric!
 
-Let's look at the cartridge memory after the characters<br /> `3333333333333333333333333333333333 5446 3230 4141 3230`<br />
+Let's look at the Stack memory after the characters<br /> `3333333333333333333333333333333333 5446 3230 4141 3230`<br />
 have been copied there:
 
 <img src="./16.5.png"></img>
