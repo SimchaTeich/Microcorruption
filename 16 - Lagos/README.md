@@ -85,6 +85,8 @@ have been copied there:
 * `3230` - 0x3032, first parameter to `getsn`, the destination
 * `4141` - 0x4141, second parameter to `getsn`, max length to take
 * `3230` - 0x3032, "ret" from `getsn` direct into the code that will be injected in the next step.
+* Note - there is 0x11 bytes with the value 0x33.<br />
+Since the first character is copied to the stack twice (and then deleted), this advances us by one byte towards the return address.
 
 And now, the user input window came up again.<br />
 Into it we will insert the code injected in Bangalore's solution.
@@ -100,10 +102,12 @@ br 0x0010
 
 <img src="./16.6.png" width="80%"></img>
 
-// to do continue
+And this is how the code injected into the memory will look, when indeed the code will jump to it.
 
 <img src="./16.7.png" width="80%"></img>
 
+And so the entire course of the program is blatantly bypassed.<br />
+Have a nice day!
 
 ## The cracking input (as bytes)
 ```
