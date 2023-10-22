@@ -1,10 +1,14 @@
 # Churchill - 30 points
  
 ## The idea
+Exploitation of entering an input through an overly simple algorithm for correctness checking.
 
 ## The way
 
 ### Black box test:
+Black box testing shows us that the program is in an infinite loop.<br />
+And we are even provided with an example.<br />
+Let's jump right into the code.
 
 ### Explore the code:
 
