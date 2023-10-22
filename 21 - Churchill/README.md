@@ -63,13 +63,12 @@ start:
         goto start;
     }
 
-    if(ans == 0)
+    if(ans != 1)
     {
         puts("Incorrect signature, continuing");
         goto start;
     }
-    
-    if(ans == 1)
+    else
     {
         puts("Signature valid, executing payload");
         memcpy(dest, 0x2424, size); // copy just the code to the dest.
