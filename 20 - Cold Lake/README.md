@@ -92,7 +92,7 @@ and then insert the code from the example<br />
 1. The injection of the code that opens the door to address 0x8008
     * 0x8008 - `0880`
     * the code is: `324000ff30401000`. the same code from Lagos challenge.
-    * signature its unknoun so any input is ok.
+    * signature its unknown so any input is ok.
 
 2. Inserting the code from the example
     * into 0x9000 - `0090`, which will not overwrite the previous code.
