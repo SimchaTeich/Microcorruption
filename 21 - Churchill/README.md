@@ -79,6 +79,8 @@ start:
     }
     else if(0 == flag)
     {
+        // for the challange provided example:
+        // https://cyphr.me/ed25519_tool/ed.html#?alg_type=Msg&msg_enc=Hex&msg=800000063041&key_enc=Hex&key=a09ae3e830085a0169641e1e22118b457f9a95e7a133643cb578fb0c25940c4f&sig=c26436953f8f3cadf1442fc218b185051ab6c20853a45f093fc32adf31529d05a5ec3e96a9e41ed9ad1b14dcbdb98e50e37a7ddc3d595b867807ed1605f2070e&verify
         if(verify_ed25519(0x2400, 0x2420, size, stackMemory) == 1)
             goto execute;
     }
