@@ -11,7 +11,7 @@
 ```c
 #define MAX_SIZE 0x400
 
-typedef void func(void);
+#define void func(void);
 
 // dest is r11
 typedef (short)*(0x2420) dest;
@@ -51,11 +51,11 @@ start:
     if(1 == flag)
     {
         sha512(0x2420, size, stackMemory);
-        asn = memcmp(stackMemory, 0x2420 + size, 0x40);
+        if (memcmp(stackMemory, 0x2420 + size, 0x40) == 1) goto execute;
     }
     else if(0 == flag)
     {
-        ans = verify_ed25519(0x2400, 0x2420, size, stackMemory); 
+        if(verify_ed25519(0x2400, 0x2420, size, stackMemory) == 1) goto execute; 
     }
     else
     {
@@ -63,19 +63,16 @@ start:
         goto start;
     }
 
-    if(ans != 1)
-    {
-        puts("Incorrect signature, continuing");
-        goto start;
-    }
-    else
-    {
-        puts("Signature valid, executing payload");
-        memcpy(dest, 0x2424, size); // copy just the code to the dest.
-        (func*)dest();
+    puts("Incorrect signature, continuing");
+    goto start;
+        
+    execute:
+    puts("Signature valid, executing payload");
+    memcpy(dest, 0x2424, size); // copy just the code to the dest.
+    (func*)dest();
 
-        goto start;
-    }
+    goto start;
+    
 }
 ```
 
