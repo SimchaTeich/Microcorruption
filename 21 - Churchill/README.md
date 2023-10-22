@@ -59,7 +59,10 @@ start:
 
     if(1 == flag)
     {
+        // make sha512 on size bytes from the start of the input
+        // and insert in into the top of the stack.
         sha512(0x2420, size, stackMemory);
+        
         if (memcmp(stackMemory, 0x2420 + size, 0x40) == 1)
             goto execute;
     }
