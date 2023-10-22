@@ -45,10 +45,10 @@ It just looks scary, but not really.
 
 7. Checking that the digital signature corresponds to the program from the user.
     * using `ed25519` algorithm
-        * param 1 - the signature
-        * param 2 - the length of the msg
-        * param 3 - the msg, this is the program from user
-        * param 4 - the public key, at addres 0x2400
+        * param 1 - the public key, at addres 0x2400
+        * param 2 - the msg, this is the program from user
+        * param 3 - the length of the msg
+        * param 4 - the signature
     * if check was faild, start program from the begining.
 
 8. prints error and start program from the begining
