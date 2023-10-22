@@ -8,6 +8,12 @@
 
 ### Explore the code:
 
+The plan is simple, but too complicated to explain in words.<br />
+Therefore, immediately after it will appear its "source code" that I wrote in c.
+
+<img src="./21.1.png"></img>
+<img src="./21.2.png"></img>
+
 ```c
 #define MAX_SIZE 0x400
 
