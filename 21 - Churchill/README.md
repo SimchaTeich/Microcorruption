@@ -8,7 +8,7 @@
 
 ### Explore the code:
 
-The plan is simple, but too complicated to explain in words.<br />
+The program is simple, but too complicated to explain in words.<br />
 Therefore, immediately after it will appear its "source code" that I wrote in c.
 
 <img src="./21.1.png"></img>
@@ -19,15 +19,9 @@ Therefore, immediately after it will appear its "source code" that I wrote in c.
 
 #define void func(void);
 
-// dest is r11
-typedef (short)*(0x2420) dest;
-
-// flag is r9
-typedef (char)*(0x2422) flag;
-
-// size is r10
-typedef (char)*(0x2423) size;
-
+typedef (short)*(0x2420) dest; // dest is r11
+typedef (char)*(0x2422) flag;  // flag is r9
+typedef (char)*(0x2423) size;  // size is r10
 
 void main()
 {
@@ -54,7 +48,7 @@ start:
     }
 
     // move the digital signature into the top of the stack.
-    memcpy(stackMemory, 0x2420 + size, 0x40); 
+    memcpy(stackMemory, 0x2420 + size, 0x40);
 
     if(1 == flag)
     {
@@ -102,7 +96,30 @@ execute:
 }
 ```
 
+Therefore, it can be said that the input is divided as follows:
+* Destination address (4 bytes)
+* flag (1 byte)
+* size of all without signature, (1 byte)
+* code to execute, ((size - 6) bytes)
+* Digital signature, (up to (0x3ff - size) bytes)
+
+For example:
+
+<img src="./21.3.png" width="80%"></img>
+
+* code destination address: `8000`
+* flag: `00`
+* size: `06`
+* code: `3041`
+* digital signature:<br /> `c26436953f8f3cadf1442fc218b185051ab6c20853a45f093fc32adf31529d05a5ec3e96a9e41ed9ad1b14dbdb98e50e37a7ddc3d595b867807ed1605f2070e`
+
+We couldn't find the private key for ed25519 in memory,<br />
+so we can't generate a code that opens the door in a simple way like in the example.<br />
+So, what can we do?
+
 ### How to exploit:
+
+
 
 
 ## The cracking input (as bytes)
