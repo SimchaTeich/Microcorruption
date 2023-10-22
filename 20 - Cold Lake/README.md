@@ -87,6 +87,24 @@ Conclusion: If we receive a code that opens the door at 0x8008,<br />
 and then insert the code from the example<br />
 (without overriding what we inserted before) - the door will open.
 
+***Illustration:***
+
+1. The injection of the code that opens the door to address 0x8008
+    * 0x8008 - `0880`
+    * the code is: `324000ff30401000`. the same code from Lagos challenge.
+    * signature its unknoun so any input is ok.
+
+2. Inserting the code from the example
+    * into 0x9000 - `0090`, which will not overwrite the previous code.
+    * the code is `3540088000450545054505450545054505450f433041`
+    * the signature is `8605e027f42368ea6bba9de66409f6a8ddedcd49614a4648281c47a7b4ad252f5639069b17ba8ff104d371e2d8a625b038f0750667364087e7987e40ea81510f`
+
+And this is how the memory will look when the code from the example starts running:<br />
+
+<img src="./20.6.png" width="80%"></img>
+
+Have a nice day!
+
 ## The cracking input (as bytes)
 ```
 0880
