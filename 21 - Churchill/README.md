@@ -151,14 +151,14 @@ And that's all!
 From the trial and error I did on memcmp I understood how it works.<br />
 Here is an implementation in c:
 ```c
-char memcmp(char *s1, char *s2, unsigned short size)
+short memcmp(char *s1, char *s2, unsigned short size)
 {
     unsigned short i;
 
     for(i = 0; i < size; i++)
     {
         if (*(s1 + i) != *(s2 + i))
-            return *(s1 + i) - *(s2 + i);
+            return (short)(*(s1 + i) - *(s2 + i));
     }
     
     return 0;
