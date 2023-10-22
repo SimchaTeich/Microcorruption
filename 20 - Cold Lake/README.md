@@ -11,9 +11,15 @@ program and signature of the program.
 
 <img src="./20.1.png" width="80%"></img>
 
+In contrast to the Vancouver challenge, here it is necessary to sign the plan as a security measure.<br />
+It can be concluded that we cannot execute our own program the easy way.
 
+So, let's jump the code.
 
 ### Explore the code:
+
+<img src="./20.2.png"></img>
+<img src="./20.3.png"></img>
 
 ### How to exploit:
 
