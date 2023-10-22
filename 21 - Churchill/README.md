@@ -29,7 +29,8 @@ typedef (char)*(0x2422) flag;
 typedef (char)*(0x2423) size;
 
 
-void main() {
+void main()
+{
 
     // allocate stack memory:
     char stackMemory[0x40]; // -0x40 == 0xffc0
@@ -41,12 +42,14 @@ start:
     memset(0x2420, 0, MAX_SIZE);
     getsn(0x2420, MAX_SIZE - 1);
 
-    if(0x8000 > dest || dest > 0xf000) {
+    if(0x8000 > dest || dest > 0xf000)
+    {
         puts("Load address outside allowed range 0x8000 - 0xF000");
         goto start;
     }
     
-    if(size < 6) {
+    if(size < 6)
+    {
         puts("Invalid payload length");
         goto start;
     }
@@ -57,11 +60,13 @@ start:
     if(1 == flag)
     {
         sha512(0x2420, size, stackMemory);
-        if (memcmp(stackMemory, 0x2420 + size, 0x40) == 1) goto execute;
+        if (memcmp(stackMemory, 0x2420 + size, 0x40) == 1)
+            goto execute;
     }
     else if(0 == flag)
     {
-        if(verify_ed25519(0x2400, 0x2420, size, stackMemory) == 1) goto execute; 
+        if(verify_ed25519(0x2400, 0x2420, size, stackMemory) == 1)
+            goto execute;
     }
     else
     {
@@ -72,13 +77,12 @@ start:
     puts("Incorrect signature, continuing");
     goto start;
         
-    execute:
+execute:
     puts("Signature valid, executing payload");
     memcpy(dest, 0x2424, size); // copy just the code to the dest.
-    (func*)dest();
+    ((func*)dest)();
 
     goto start;
-    
 }
 ```
 
