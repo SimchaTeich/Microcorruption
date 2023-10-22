@@ -141,8 +141,25 @@ Now we'll want for the "signature" a sequence of bytes that is both lexically sm
 After a bit of trial and error, we found the sequence for which memcmp would return 1:<br />
 `08000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`
 
-Good bye!
+And that's all!
 
+***Bonus:***<br />
+From the trial and error I did on memcmp I understood how it works.<br />
+Here is an implementation in c:
+```c
+char memcmp(char *s1, char *s2, int size)
+{
+    int i;
+
+    for(i = 0; i < size; i++)
+    {
+        if (*(s1 + i) != *(s2 + i))
+            return *(s1 + i) - *(s2 + i);
+    }
+
+    return 0;
+}
+```
 
 ## The cracking input (as bytes)
 ```
