@@ -97,11 +97,11 @@ execute:
 ```
 
 Therefore, it can be said that the input is divided as follows:
-* Destination address (4 bytes)
+* Destination address (2 bytes)
 * flag (1 byte)
-* size of all without signature, (1 byte)
-* code to execute, ((size - 6) bytes)
-* Digital signature, (up to (0x3ff - size) bytes)
+* size of all without signature (1 byte)
+* code to execute ((size - 4) bytes)
+* Digital signature (0x40 bytes)
 
 For example:
 
@@ -119,10 +119,32 @@ So, what can we do?
 
 ### How to exploit:
 
+We will note that if the value of the flag is 1,<br />
+all we need to open the door is that the string sha512(addr + flag + size + my code)<br />
+be greater than the signature I enter.<br />
+And if memcmp returns not just a value greater than 0, but an actual 1, we've won.
 
+Let's start compiling our input:
+* code destination address: `8000`
+* flag: `01`
+* size: `0c`
+* code: `324000ff30401000`
+    * same code from Lagos challange
+    * you can check what it does by yourself.
+
+To build a good "signature", let's look at sha512:
+* sha512(`8000 01 0c 324000ff30401000`) == <br />
+`09f072b7d3bfa6fce5ca0596a27818db0b054a0f0dd6bba7d3f9d3f810deae223b995ac0b07095a3460da22e46233a8c797ea9c305d6d05e0d1f4a2c1df3d3ff`
+
+Now we'll want for the "signature" a sequence of bytes that is both lexically smaller than the sequence above and memcpy will return 1.
+
+After a bit of trial and error, we found the sequence for which memcmp would return 1:<br />
+`08000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`
+
+Good bye!
 
 
 ## The cracking input (as bytes)
 ```
-
+8000 01 0c 324000ff30401000 08000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 ```
