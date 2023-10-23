@@ -13,9 +13,10 @@ just like in the Churchill challenge.
 <img src="./23.1.png" width="80%"></img>
 <img src="./23.2.png" width="80%"></img>
 
-
+At first glance it seems that the input is just like in the Churchill challenge.
 
 ### Explore the code:
+
 
 ### How to exploit:
 
