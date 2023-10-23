@@ -54,6 +54,8 @@ Two important things were discovered here:<br />
 And the fact that the function `aes_ecb_decrypt` receives the pointer<br />
 to those 11 sequences allows us to assume that these are **keys**.
 
+If we find the encrypted bytes of the string `ACCESS GRANTED!\x00`, we will open the door.
+
 ### How to exploit:
 In fact, I understood the way this encryption works from the reversing operation.<br />
 And I learned about the inverse s box, the permutations, etc.<br />
@@ -64,7 +66,7 @@ And so I decided first to write a code that decrypt,<br />
 and check if it is the same as the `aes_ecb_decrypt` function.<br />
 A simple check by putting some input into the challenge<br />
 and the same into the code, and comparing the two results.<br />
-If they are equal then the decoding function was written correctly.
+If they are equal then the decryption function was written correctly.
 
 I asked https://talkai.info/chat/ for the following request:<br />
 "Write code in Python for decrypting aes ecb encryption using<br />
