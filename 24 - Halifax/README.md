@@ -1,12 +1,37 @@
 # Halifax - 20 points
  
 ## The idea
+Exploitation of the ability to extract the hash of any part I want,<br />
+and in any size I want, from a memory that is not accessible.
 
 ## The way
 
 ### Black box test:
+Let's look at the challenge instructions:
+
+<img src="./24.1.png" width="80%"></img>
+* we can't unlock the door by 0x7f interrupt anymore
+* ther is a mistake here. it's 0x42.
+* payload is very clearly. we can divide it to 3 parts:
+    * dest - `8000`
+    * size of code - `02`
+    * code - `3041`
+
+Let's also look at how it looks in the user window:
+
+<img src="./24.2.png" width="80%"></img>
+* red - it's a mistake. 0x42, not 0x41.
+
+Let's explore the code.
 
 ### Explore the code:
+
+Below is the main function of the program.<br />
+Immediately afterwards a reconstruction of this code will appear in c.<br />
+I did this to make it easier to explain, so read it carefully as well.
+
+<img src="./24.3.png"></img>
+<img src="./24.4.png"></img>
 
 ```c
 #define MAX_SIZE 0x400
