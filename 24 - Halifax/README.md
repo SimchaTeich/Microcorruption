@@ -407,19 +407,65 @@ All that remains is to provide it to interrupt 0x42.<br />
 And so now we have built a code that opens the door.
 
 ```asm
-push	#0x500c ; pointer to password, immediatly after the code
+push	#0x5010   ; password appears immediately after the code.
 push	#0x42
-call	#0x4550 ; INT
+call	#0x4550   ; INT
+add #0x4, sp
+ret
 ```
 
-Code is: `30120c5030124200b0125045`
-Password is: `69cce2bf76a43065d701824ddb735aaa 00` (0x0 at the end.)
-Size is: 0xc + 0x10 = 0x1c
+Code is: `3012105030124200b012504521523041`<br />
+Password is: `69cce2bf76a43065d701824ddb735aaa`<br />
+Size is: 0xc + 0x10 = 0x1c<br />
 And we will arbitrarily decide that the code will enter address 0x5000.<br />
-We will add them all and get: `5000 1c 30120c5030124200b0125045 69cce2bf76a43065d701824ddb735aaa 00`
+We will add them all and get: `5000 20 3012105030124200b012504521523041 69cce2bf76a43065d701824ddb735aaa`
 
+And that's how the door opens!<br />
+Let's summarize the actions to open the door only.
 
 ## The cracking input (as bytes)
+The next input is to print 16 hashes, each for one byte in the password:
+```
+5000 60 384010003440e04335400100364030000d440e450f46b012b6450b433f40e0430f5b6e4f0f4e3ff00f005a4f104712c34e1012c34e1012c34e1012c34e103ef00f005f4e1047b01278454f4ab01278451b533b902000e22316531883d9233041
 ```
 
+Now we will copy them to the appropriate place in the following code and run it:
+```python
+from hashlib import sha256
+
+PASSWORD_HASHES = "".lower() # copy the hashes here.
+
+def convert_hashes_to_bytes(hashes):
+    hash_byte_dict = {}
+    for i in range(256):
+        curr_byte = bytes.fromhex(hex(i)[2:].zfill(2))
+        hash_byte_dict.update({sha256(curr_byte).hexdigest() : i})
+    
+    return [hash_byte_dict.get(h) for h in hashes] 
+ 
+
+def main():
+    hashes_list = [PASSWORD_HASHES[64*i:64*(i+1)] for i in range(16)]
+    password_bytes = convert_hashes_to_bytes(hashes_list)
+ 
+    password = ''
+    for b in password_bytes:
+        password += hex(b)[2:].zfill(2)
+    
+    # Prints the input that will open the door
+    print("5000 20 3012105030124200b012504521523041 " + password)
+
+if __name__ == '__main__':
+    main()
 ```
+
+The result from the following code must be copied in its entirety as the final input to the challenge.
+
+**A very important note:**<br />
+There is not always a password.<br />
+Remember that sometimes SRAM contains 0x40 bytes and sometimes 0x140 bytes?<br />
+So only when it contains 0x40 bytes there is a password, and in the second option there is no password. I checked.<br />
+Therefore if you did the above operations and the door did not open, it is a sign that SRAM contains 0x140 bytes.<br />
+So restart the challenge and try again.<br />
+good luck!
+
