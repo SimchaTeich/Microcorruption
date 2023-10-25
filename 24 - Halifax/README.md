@@ -266,7 +266,7 @@ mov	    #0x5026, r11   ; pointer to first "potential passowrd" (0-16, 1-17, 2-18
 ; try to unlock the door
 push	r11            ; <TAG>
 push	#0x42
-call	#0x4550
+call	#0x4550        ; INT
 add	    #0x4, sp
 
 inc	    r11            ; go to the next "potential password" 
@@ -400,7 +400,23 @@ if __name__ == '__main__':
     main()
 ```
 
+<img src="./24.13.png" width="80%"></img>
 
+So, this is the password: `69cce2bf76a43065d701824ddb735aaa`
+All that remains is to provide it to interrupt 0x42.<br />
+And so now we have built a code that opens the door.
+
+```asm
+push	#0x500c ; pointer to password, immediatly after the code
+push	#0x42
+call	#0x4550 ; INT
+```
+
+Code is: `30120c5030124200b0125045`
+Password is: `69cce2bf76a43065d701824ddb735aaa 00` (0x0 at the end.)
+Size is: 0xc + 0x10 = 0x1c
+And we will arbitrarily decide that the code will enter address 0x5000.<br />
+We will add them all and get: `5000 1c 30120c5030124200b0125045 69cce2bf76a43065d701824ddb735aaa 00`
 
 
 ## The cracking input (as bytes)
