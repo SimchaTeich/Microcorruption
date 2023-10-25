@@ -245,7 +245,13 @@ In the previous images you can see 0x140 bytes. Let's see SRAM with 0x40 bytes:
 <img src="./24.9.png" width="80%"></img>
 <img src="./24.10.png"></img>
 
-And because there is no sequence of 16 bytes that can be compared between the two SRAMs, then it can be assumed that the password is stored in a fixed place somewhere in the part that has content.
+And because there is no sequence of 16 bytes that can be compared between the two SRAMs, then it can be assumed that the password changes every time.<br />
+but therefore its place is fixed...<br />
+But where?
+
+
+
+
 
 
 ## The cracking input (as bytes)
