@@ -102,7 +102,7 @@ Let's pay attention again to the `sha256_internal` function.<br />
 It does not limit the amount of bytes it hashes.<br />
 That means you can also extract each byte there separately.<br />
 Therefore, as a start only, we will try to extract all the SRAM and hash it.<br />
-The following code extracts 0x400 bytes, where each byte becomes a 16-byte hash and is stored in memory.
+The following code extracts the first 0x400 bytes from SRAM, where each byte becomes a 16-byte hash and is stored in memory.
 
 ```asm
 ; save registers
@@ -141,6 +141,80 @@ pop	r8
 ret
 ```
 
+So this is the code: `081209120a120b120d120e120f123b40000438400060394001003a4000000d480e490f4ab012b645385020003a5001001b83f5233f413e413d413b413a41394138413041`<br />
+Size is: 0x44<br />
+And we will arbitrarily decide that the code will enter address 0x5000.
+We will add them all and get: `5000 44 081209120a120b120d120e120f123b40000438400060394001003a4000000d480e490f4ab012b645385020003a5001001b83f5233f413e413d413b413a41394138413041`<br />
+And now we will see the results in memory:
+
+<img src="./24.5.png" width="80%"></img>
+* First part is the code at address 0x5000
+* The second is the sha256 of all the first 0x400 bytes.
+    * sha256(0, 1, 0x6000)
+    * sha256(1, 1, 0x6020)
+    * sha256(2, 1, 0x6040)
+    * sha256(3, 1, 0x6060)
+    * ...
+    * sha256(0x400, 1, 0xdfe0)
+
+Before we get the SRAM bytes out of what came out, we will note that at some point the value of all the bytes is the same.
+
+<img src="./24.6.png" width="80%"></img>
+* sha256('\x00') == 6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d
+* That means we won't have to look for the password in all the SRAM...
+
+Now we will copy all of this hex dump into a text file, and create a program that will decode it and print the entire SRAM in bytes.<br />
+Note: We only extracted 0x400 bytes out of 0x1000.<br />
+Therefore we will fill in all the rest with zeros.
+
+<img src="./24.7.png" width="80%"></img>
+
+```python
+from hashlib import sha256
+
+FILENAME = "hexdump"
+
+def extract_hashs():
+    # extract lines of content
+    with open(FILENAME, 'r') as hexdump_file:
+        hexdump_lines = hexdump_file.readlines()
+    
+    # extract just the binaries content from heach line
+    bytes_str = ''
+    for line in hexdump_lines:
+        bytes_str += line[6:46].replace(' ', '')
+    
+    # divide bytes to groups of 32 bytes (size of sha256)
+    # note: 64=32*2 because every letter here actualy is byte, but represent nibble..
+    return [bytes_str[64*i:64*(i+1)] for i in range(len(bytes_str)//64)]
+
+   
+def get_0x400_bytes_by_hash(first_0x400_hashs):
+    dict_256_hashs = {}
+    for i in range(256):
+        dict_256_hashs.update({sha256(bytes.fromhex(hex(i)[2:].zfill(2))).hexdigest():i})
+    
+    return [dict_256_hashs.get(h) for h in first_0x400_hashs] 
+ 
+
+def save(first_0x400_bytes):    
+    sram_bytes_as_hex = ''
+    for b in first_0x400_bytes:
+        sram_bytes_as_hex += hex(b)[2:].zfill(2)
+    
+    sram_bytes_as_hex += '00' * (0x1000-0x400)
+    print("SRAM 0x00-0x1000:")
+    print(sram_bytes_as_hex)
+    print("sha256(SRAM) =", sha256(bytes.fromhex(sram_bytes_as_hex)).hexdigest())
+ 
+   
+def main():
+    save(get_0x400_bytes_by_hash(extract_hashs()))
+
+
+if __name__ == '__main__':
+    main()
+```
 
 
 ## The cracking input (as bytes)
