@@ -47,7 +47,7 @@ void main()
     puts("Welcome to the test program loader.");
 
     puts("Enablibg hardened mode");
-    INT(0x40); // interrupt for harden mode.
+    INT(0x40); // init the SRAM.
 
     puts("Verifying 0x7f interrupt disable");
     INT(0x7f); // unlock-the-door interrupt doesn't work anymore.
@@ -171,10 +171,10 @@ Therefore we will fill in all the rest with zeros.
 
 ```python
 from hashlib import sha256
-
+ 
 FILENAME = "hexdump.txt"
-
-def extract_hashs():
+ 
+def extract_hashes():
     # extract lines of content
     with open(FILENAME, 'r') as hexdump_file:
         hexdump_lines = hexdump_file.readlines()
@@ -188,7 +188,7 @@ def extract_hashs():
     # note: 64=32*2 because every letter here actualy is byte, but represent nibble..
     return [bytes_str[64*i:64*(i+1)] for i in range(len(bytes_str)//64)]
  
- 
+
 def convert_hashes_to_bytes(hashes):
     # build dictionary: {sha256(byte): byte}
     hash_byte_dict = {}
@@ -199,7 +199,7 @@ def convert_hashes_to_bytes(hashes):
     # convert every hash to byte
     return [hash_byte_dict.get(h) for h in hashes] 
  
- 
+
 def print_SRAM(first_bytes):    
     SRAM = ''
     for b in first_bytes:
@@ -215,17 +215,37 @@ def print_SRAM(first_bytes):
 def main():
     # extract hashes from hexdump.txt
     original_hashes = extract_hashes()
-
+    
     # convert every hash to the correct byte
-    oroginal_bytes = convert_hashes_to_bytes(hashes)
-
+    original_bytes = convert_hashes_to_bytes(original_hashes)
+    
     # prints all the SRAM as bytes.
-    print_SRAM(oroginal_bytes)
+    print_SRAM(original_bytes)
  
- 
+
 if __name__ == '__main__':
     main()
 ```
+
+And these are the results:
+<img src="./24.8.png"></img>
+* blue - 0x1000 bytes of SRAM
+* yellow - sha256(SRAM)
+
+See the hash circled in yellow `7622e88825895c37fcd6d0f1307647a3b673b009390b5be9a65a84a2546ef731`.<br />
+It's the same hash that is shown to us in the user window (first picture, scroll up).<br />
+This means that we managed to extract all the SRAM memory at this moment!
+
+You can see that there are 0x140 bytes with content and everything else is empty.<bt />
+If we restart the challenge again, then we will find that INT(0x40) is actually responsible for changing the SRAM content every time.<br />
+And no, he is not responsible for the hard mode. I checked.<br />
+And trial and error reveals to us that SRAM contains after INT(0x40) or 0x140 bytes, or 0x40 bytes.<br />
+In the previous images you can see 0x140 bytes. Let's see SRAM with 0x40 bytes:
+
+<img src="./24.9.png" width="80%"></img>
+<img src="./24.10.png"></img>
+
+And because there is no sequence of 16 bytes that can be compared between the two SRAMs, then it can be assumed that the password is stored in a fixed place somewhere in the part that has content.
 
 
 ## The cracking input (as bytes)
