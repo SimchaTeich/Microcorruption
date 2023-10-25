@@ -124,7 +124,7 @@ clr	r10         ; init offset from start of SRAM.
 mov	r8, r13
 mov	r9, r14
 mov	r10, r15
-call	#0x45b6 ; sha256(offset, size, dest)
+call	#0x45b6 ; sha256_internal(offset, size, dest)
 add	#0x20, r8   ; the next dest address, so as not to overrun the previous result.
 inc	r10         ; offset++
 dec	r11         ; i--
@@ -249,7 +249,103 @@ And because there is no sequence of 16 bytes that can be compared between the tw
 but therefore its place is fixed...<br />
 But where?
 
+So I built a code that goes through all the sequences of length 16 that were extracted before (like a window that scrolls along the buffer).<br />
+The code is copied to memory and immediately after that the content of the extracted SRAM will be attached.<br />
+so that the code will pass it.
 
+```asm
+; save registers
+push	r10
+push	r11
+
+mov 	#0x40, r10     ; counter = 0x40
+mov	    #0x5026, r11   ; pointer to first "potential passowrd" (0-16, 1-17, 2-18..., 0x40 - 0x50)
+
+; while(counter > 0)
+
+; try to unlock the door
+push	r11            ; <TAG>
+push	#0x42
+call	#0x4550
+add	    #0x4, sp
+
+inc	    r11            ; go to the next "potential password" 
+dec	    r10            ; counter--
+jnz	    $-0x12         ; jump to <TAG>
+
+; restoring registers
+pop	    r11
+pop	    r10
+ret
+```
+
+So this code is: `0a120b123a4040003b4026500b1230124200b012504521523b5001001a83f6233b413a413041`<br />
+Current SRAM 0x40 bytes of contet is: `01fa6fdd14a27347b7311fea82889a2268f1e4e9b214da96768be5658dd181ba`<br />
+Size is: 0x26 + 0x40 = 0x66
+And we will arbitrarily decide that the code will enter address 0x5000.<br />
+We will add them all and get: `5000 66 0a120b123a4040003b4026500b1230124200b012504521523b5001001a83f6233b413a413041 01fa6fdd14a27347b7311fea82889a2268f1e4e9b214da96768be5658dd181ba`<br />
+
+But it is important to say, in this case even if the door opens it will not help.<br />
+Because we used the memory itself to extract the information, and we will not be able to do this in the solve screen.<br />
+Therefore, we will carefully **just debug this code** and follow the _r11_ register that holds the pointer to the potential password.<br />
+When the door opens, we will remember the last value of _r11_, so we can easily know where the password is.
+
+// to continu
+
+Without yet knowing where the password is hidden (there is no way I will manually check 0x40 sequences of size 16...)<br />
+it can be concluded that the challenge cannot be solved without printing all the hashes.<br />
+And that's because the **solve window doesn't have access to memory**<br />
+And so I created as the first step of the solution a code that prints 0x40 sequences of hashes.<br />
+Each hash is for a piece of size 16 bytes from SRAM.
+
+```asm
+; init values.
+mov	    #0x10, r8          ; counter = 0x10
+mov	    #0x43e0, r4        ; init destination
+mov	    #0x1, r5           ; init size
+mov	    #0x30, r6          ; init offset from start of SRAM.
+
+while(counter > 0)
+mov	    r4, r13;           ; <TAG>
+mov	    r5, r14
+mov	    r6, r15
+call	#0x45b6            ; sha256_internal(offset, size, dest)
+clr	    r11
+
+;------------------------------------------------------
+; Start of the loop that prints the hash to the screen.
+;------------------------------------------------------
+mov	    #0x43e0, r15
+add	    r11, r15
+mov.b	@r15, r14
+mov	    r14, r15
+and	    #0xf, r15
+mov.b	0x4710(r15), r10
+clrc
+rrc.b	r14
+clrc
+rrc.b	r14
+clrc
+rrc.b	r14
+clrc
+rrc.b	r14
+and	    #0xf, r14
+mov.b	0x4710(r14), r15
+call	#0x4578 <putchar>
+mov.b	r10, r15
+call	#0x4578 <putchar>
+inc 	r11
+cmp	    #0x20, r11
+jnz	    $-0x3a
+;-----------------------------------------------------
+; Ends of the loop that prints the hash to the screen.
+;-----------------------------------------------------
+
+inc     r6
+dec     r8
+jnz     $-0x4c ;---------------------------jump to <TAG>
+ret
+```
 
 
 
