@@ -85,7 +85,62 @@ void main()
 }
 ```
 
+So we can run any code we want, but we won't be able to open the door with the 0x7f interface like we did in all the previous challenges.<br />
+
+Let's pay attention to the `sha256_internal` function:
+* param1 - offset from the beginning of the SRAM.
+* param2 - size of bytes from the offset to take
+* param3 - Destination address for the memory accessible to us, to which the result of the function will be written.
+    * The result is the sha256 of the bytes we selected from the SRAM.
+
+So the password is somewhere in a memory area whose size is 0x1000 bytes and which is not accessible to us.<br />
+
+what can we do?
+
 ### How to exploit:
+Let's pay attention again to the `sha256_internal` function.<br />
+It does not limit the amount of bytes it hashes.<br />
+That means you can also extract each byte there separately.<br />
+Therefore, as a start only, we will try to extract all the SRAM and hash it.<br />
+The following code extracts 0x400 bytes, where each byte becomes a 16-byte hash and is stored in memory.
+
+```asm
+; save registers
+push	r8
+push	r9
+push	r10
+push	r11
+push	r13
+push	r14
+push	r15
+
+; init values.
+mov	#0x400, r11 ; i = 0x400
+mov	#0x6000, r8 ; init destination
+mov	#0x1, r9    ; init size
+clr	r10         ; init offset from start of SRAM.
+
+; while loop
+mov	r8, r13
+mov	r9, r14
+mov	r10, r15
+call	#0x45b6 ; sha256(offset, size, dest)
+add	#0x20, r8   ; the next dest address, so as not to overrun the previous result.
+inc	r10         ; offset++
+dec	r11         ; i--
+jnz	$-0x14      ; while(i>0) 
+
+; restoring registers
+pop	r15
+pop	r14
+pop	r13
+pop	r11
+pop	r10
+pop	r9
+pop	r8
+ret
+```
+
 
 
 ## The cracking input (as bytes)
