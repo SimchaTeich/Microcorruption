@@ -258,7 +258,7 @@ so that the code will pass it.
 push	r10
 push	r11
 
-mov 	#0x40, r10     ; counter = 0x40
+mov     #0x40, r10     ; counter = 0x40
 mov	    #0x5026, r11   ; pointer to first "potential passowrd" (0-16, 1-17, 2-18..., 0x40 - 0x50)
 
 ; while(counter > 0)
@@ -280,41 +280,48 @@ ret
 ```
 
 So this code is: `0a120b123a4040003b4026500b1230124200b012504521523b5001001a83f6233b413a413041`<br />
-Current SRAM 0x40 bytes of contet is: `01fa6fdd14a27347b7311fea82889a2268f1e4e9b214da96768be5658dd181ba`<br />
+Current SRAM 0x40 bytes of contet is: `de1f6be4a8f08cdf834206e83e0579d313751750df2b790b82e3be262493b68c5033a925aeaefab3f6e8e26bc8390c326cc3458d91c90ad6849926fa809681d0`<br />
 Size is: 0x26 + 0x40 = 0x66
 And we will arbitrarily decide that the code will enter address 0x5000.<br />
-We will add them all and get: `5000 66 0a120b123a4040003b4026500b1230124200b012504521523b5001001a83f6233b413a413041 01fa6fdd14a27347b7311fea82889a2268f1e4e9b214da96768be5658dd181ba`<br />
+We will add them all and get: `5000 66 0a120b123a4040003b4026500b1230124200b012504521523b5001001a83f6233b413a413041 de1f6be4a8f08cdf834206e83e0579d313751750df2b790b82e3be262493b68c5033a925aeaefab3f6e8e26bc8390c326cc3458d91c90ad6849926fa809681d0`<br />
 
 But it is important to say, in this case even if the door opens it will not help.<br />
 Because we used the memory itself to extract the information, and we will not be able to do this in the solve screen.<br />
 Therefore, we will carefully **just debug this code** and follow the _r11_ register that holds the pointer to the potential password.<br />
-When the door opens, we will remember the last value of _r11_, so we can easily know where the password is.
+When the door opens, we will remember the last value of _r11_, so we can easily know where the password is:<br />
 
-// to continu
+<img src="./24.11.png" width="80%"></img>
+* `5056` - 0x5056 is the correct pointer to the password.
+* remember: 0x5026 it was the pointer to the first byte in this SRAM content.
+* So offset of password is 0x5056 - 0x5026 = 0x30
 
-Without yet knowing where the password is hidden (there is no way I will manually check 0x40 sequences of size 16...)<br />
-it can be concluded that the challenge cannot be solved without printing all the hashes.<br />
-And that's because the **solve window doesn't have access to memory**<br />
-And so I created as the first step of the solution a code that prints 0x40 sequences of hashes.<br />
-Each hash is for a piece of size 16 bytes from SRAM.
+And that's how it will be found that the **password at offset 0x30 from the start on SRAM**
+
+Therefore, for the solution made in the solve screen:
+* we have to print to the screen the 16 hashes for 16 bytes.
+* starting from offset 0x30.
+* and then convert them to a password.
+
+So this is the code that will print the 16 hashes to the screen, each hash will be for one byte of the password.<br />
+Note: The print part is taken directly from main, so the result of the hash for each byte will enter the top of the stack and overwrite the previous one.
 
 ```asm
 ; init values.
-mov	    #0x10, r8          ; counter = 0x10
+mov	    #0x10, r8          ; counter = 16 (length of the password)
 mov	    #0x43e0, r4        ; init destination
 mov	    #0x1, r5           ; init size
-mov	    #0x30, r6          ; init offset from start of SRAM.
+mov	    #0x30, r6          ; offset of the first password byte inside SRAM.
 
-while(counter > 0)
-mov	    r4, r13;           ; <TAG>
+; while(counter > 0)
+mov	    r4, r13            ; <TAG>
 mov	    r5, r14
 mov	    r6, r15
 call	#0x45b6            ; sha256_internal(offset, size, dest)
-clr	    r11
 
 ;------------------------------------------------------
 ; Start of the loop that prints the hash to the screen.
 ;------------------------------------------------------
+clr	    r11
 mov	    #0x43e0, r15
 add	    r11, r15
 mov.b	@r15, r14
@@ -341,10 +348,27 @@ jnz	    $-0x3a
 ; Ends of the loop that prints the hash to the screen.
 ;-----------------------------------------------------
 
-inc     r6
-dec     r8
-jnz     $-0x4c ;---------------------------jump to <TAG>
+inc     r6                 ; offset++
+dec     r8                 ; counter--
+jnz     $-0x4c             ; jump to <TAG>
 ret
+```
+
+So this code is: `384010003440e04335400100364030000d440e450f46b012b6450b433f40e0430f5b6e4f0f4e3ff00f005a4f104712c34e1012c34e1012c34e1012c34e103ef00f005f4e1047b01278454f4ab01278451b533b902000e22316531883d9233041`<br />
+Size is: 0x60<br />
+And we will arbitrarily decide that the code will enter address 0x5000.<br />
+We will add them all and get: `5000 60 384010003440e04335400100364030000d440e450f46b012b6450b433f40e0430f5b6e4f0f4e3ff00f005a4f104712c34e1012c34e1012c34e1012c34e103ef00f005f4e1047b01278454f4ab01278451b533b902000e22316531883d9233041`
+
+This is how the screen will look to the user after the above code:
+<img src="./24.12.png" width="80%"></img>
+
+We will copy the long yellow sequence:<br />
+`DE7D1B721A1E0632B7CF04EDF5032C8ECFFA9F9A08492152B926F1A5A7E765D71DD8312636F6A0BF3D21FA2855E63072507453E93A5CED4301B364E91C9D87D630A5BFA58E128AF9E5A4955725D8AD26D4D574A537B58B7DC6D357ACAD578572B12DC850A3B0A3B79FC2255E175241CE20489FE45DF93FF35C42C6C348DF4FBF4C94485E0C21AE6C41CE1DFE7B6BFACEEA5AB68E40A2476F50208E526F50608088AA3E3B1F22C616B1817981215E7D1E75FA32B22233EBB8477F64600A5ACE1F5FECEB66FFC86F38D952786C6D696C79C2DBC239DD4E91B46729D73A27FB57E93F79BB7B435B05321651DAEFD374CDC681DC06FAA65E374E38337B88CA046DEA414A21E525A759E3FFEB22556BE6348A92D5A13E40B61A0805F36F18C29095134BF5122F344554C53BDE2EBB8CD2B7E3D1600AD631C385A5D7CCE23C7785459AA5AB782C805E8BFBE34CB65742A0471CF5A53A97F0A1160AB6CCCBB64C9131CE08F271887CE94707DA822D5263BAE19D5519CB3614E0DAEDC4C7CE5DAB7473F1B7D25296E7BC6A6BF66DA09B1C5ED273D99E3A9FC6D43E46CCB8B358FA13D4E9043A718774C572BD8A25ADBEB1BFCD5C0256AE11CECF9F9C3F925D0E52BEAF89BBEEBD879E1DFF6918546DC0C179FDDE505F2A21591C9A9C96E36B054EC5AF83BCEEF655B5A034911F1C3718CE056531B45EF03B4C7B1F15629E867294011A7D`<br />
+It constitutes 16 hashes, each hash for one byte in the password.<br />
+Let's build a Python code that will extract the password from this:
+
+```python
+
 ```
 
 
