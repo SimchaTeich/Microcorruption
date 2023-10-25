@@ -172,7 +172,7 @@ Therefore we will fill in all the rest with zeros.
 ```python
 from hashlib import sha256
 
-FILENAME = "hexdump"
+FILENAME = "hexdump.txt"
 
 def extract_hashs():
     # extract lines of content
@@ -189,27 +189,38 @@ def extract_hashs():
     return [bytes_str[64*i:64*(i+1)] for i in range(len(bytes_str)//64)]
 
    
-def get_0x400_bytes_by_hash(first_0x400_hashs):
-    dict_256_hashs = {}
+def convert_hashes_to_bytes(hashes):
+    # build dictionary: {sha256(byte): byte}
+    hash_byte_dict = {}
     for i in range(256):
-        dict_256_hashs.update({sha256(bytes.fromhex(hex(i)[2:].zfill(2))).hexdigest():i})
+        curr_byte = bytes.fromhex(hex(i)[2:].zfill(2))
+        hash_byte_dict.update({sha256(curr_byte).hexdigest() : i})
     
-    return [dict_256_hashs.get(h) for h in first_0x400_hashs] 
+    # convert every hash to byte
+    return [hash_byte_dict.get(h) for h in hashes] 
  
 
-def save(first_0x400_bytes):    
-    sram_bytes_as_hex = ''
-    for b in first_0x400_bytes:
-        sram_bytes_as_hex += hex(b)[2:].zfill(2)
+def print_SRAM(first_bytes):    
+    SRAM = ''
+    for b in first_bytes:
+        SRAM += hex(b)[2:].zfill(2) # remove the '0x'
     
-    sram_bytes_as_hex += '00' * (0x1000-0x400)
-    print("SRAM 0x00-0x1000:")
-    print(sram_bytes_as_hex)
-    print("sha256(SRAM) =", sha256(bytes.fromhex(sram_bytes_as_hex)).hexdigest())
+    SRAM += '00' * (0x1000-0x400)   # completes the rest of the bytes
+    
+    # print all the SRAM and the sha256(SRAM)
+    print("SRAM 0x00-0x1000:\n" + SRAM)
+    print("sha256(SRAM) =", sha256(bytes.fromhex(SRAM)).hexdigest())
  
    
 def main():
-    save(get_0x400_bytes_by_hash(extract_hashs()))
+    # extract hashes from hexdump.txt
+    original_hashes = extract_hashes()
+
+    # convert every hash to the correct byte
+    oroginal_bytes = convert_hashes_to_bytes(hashes)
+
+    # prints all the SRAM as bytes.
+    print_SRAM(oroginal_bytes)
 
 
 if __name__ == '__main__':
