@@ -187,8 +187,8 @@ def extract_hashs():
     # divide bytes to groups of 32 bytes (size of sha256)
     # note: 64=32*2 because every letter here actualy is byte, but represent nibble..
     return [bytes_str[64*i:64*(i+1)] for i in range(len(bytes_str)//64)]
-
-   
+ 
+ 
 def convert_hashes_to_bytes(hashes):
     # build dictionary: {sha256(byte): byte}
     hash_byte_dict = {}
@@ -199,7 +199,7 @@ def convert_hashes_to_bytes(hashes):
     # convert every hash to byte
     return [hash_byte_dict.get(h) for h in hashes] 
  
-
+ 
 def print_SRAM(first_bytes):    
     SRAM = ''
     for b in first_bytes:
@@ -211,7 +211,7 @@ def print_SRAM(first_bytes):
     print("SRAM 0x00-0x1000:\n" + SRAM)
     print("sha256(SRAM) =", sha256(bytes.fromhex(SRAM)).hexdigest())
  
-   
+
 def main():
     # extract hashes from hexdump.txt
     original_hashes = extract_hashes()
@@ -221,8 +221,8 @@ def main():
 
     # prints all the SRAM as bytes.
     print_SRAM(oroginal_bytes)
-
-
+ 
+ 
 if __name__ == '__main__':
     main()
 ```
