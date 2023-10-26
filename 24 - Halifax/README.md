@@ -258,8 +258,8 @@ so that the code will pass it.
 push	r10
 push	r11
 
-mov     #0x40, r10     ; counter = 0x40
-mov	    #0x5026, r11   ; pointer to first "potential passowrd" (0-16, 1-17, 2-18..., 0x40 - 0x50)
+mov	#0x40, r10     ; counter = 0x40
+mov	#0x5026, r11   ; pointer to first "potential passowrd" (0-16, 1-17, 2-18..., 0x40 - 0x50)
 
 ; while(counter > 0)
 
@@ -267,15 +267,15 @@ mov	    #0x5026, r11   ; pointer to first "potential passowrd" (0-16, 1-17, 2-18
 push	r11            ; <TAG>
 push	#0x42
 call	#0x4550        ; INT
-add	    #0x4, sp
+add	#0x4, sp
 
-inc	    r11            ; go to the next "potential password" 
-dec	    r10            ; counter--
-jnz	    $-0x12         ; jump to <TAG>
+inc	r11            ; go to the next "potential password" 
+dec	r10            ; counter--
+jnz	$-0x12         ; jump to <TAG>
 
 ; restoring registers
-pop	    r11
-pop	    r10
+pop	r11
+pop	r10
 ret
 ```
 
