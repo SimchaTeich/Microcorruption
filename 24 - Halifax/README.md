@@ -11,7 +11,7 @@ Let's look at the challenge instructions:
 
 <img src="./24.1.png" width="80%"></img>
 * we can't unlock the door by 0x7f interrupt anymore
-* ther is a mistake here. it's 0x42.
+* there is a mistake here. it's 0x42.
 * payload is very clearly. we can divide it to 3 parts:
     * dest - `8000`
     * size of code - `02`
@@ -143,7 +143,7 @@ ret
 
 So this is the code: `081209120a120b120d120e120f123b40000438400060394001003a4000000d480e490f4ab012b645385020003a5001001b83f5233f413e413d413b413a41394138413041`<br />
 Size is: 0x44<br />
-And we will arbitrarily decide that the code will enter address 0x5000.
+And we will arbitrarily decide that the code will enter address 0x5000.<br />
 We will add them all and get: `5000 44 081209120a120b120d120e120f123b40000438400060394001003a4000000d480e490f4ab012b645385020003a5001001b83f5233f413e413d413b413a41394138413041`<br />
 And now we will see the results in memory:
 
@@ -281,7 +281,7 @@ ret
 
 So this code is: `0a120b123a4040003b4026500b1230124200b012504521523b5001001a83f6233b413a413041`<br />
 Current SRAM 0x40 bytes of contet is: `de1f6be4a8f08cdf834206e83e0579d313751750df2b790b82e3be262493b68c5033a925aeaefab3f6e8e26bc8390c326cc3458d91c90ad6849926fa809681d0`<br />
-Size is: 0x26 + 0x40 = 0x66
+Size is: 0x26 + 0x40 = 0x66<br />
 And we will arbitrarily decide that the code will enter address 0x5000.<br />
 We will add them all and get: `5000 66 0a120b123a4040003b4026500b1230124200b012504521523b5001001a83f6233b413a413041 de1f6be4a8f08cdf834206e83e0579d313751750df2b790b82e3be262493b68c5033a925aeaefab3f6e8e26bc8390c326cc3458d91c90ad6849926fa809681d0`<br />
 
@@ -416,7 +416,7 @@ ret
 
 Code is: `3012105030124200b012504521523041`<br />
 Password is: `69cce2bf76a43065d701824ddb735aaa`<br />
-Size is: 0xc + 0x10 = 0x1c<br />
+Size is: 0x10 + 0x10 = 0x20<br />
 And we will arbitrarily decide that the code will enter address 0x5000.<br />
 We will add them all and get: `5000 20 3012105030124200b012504521523041 69cce2bf76a43065d701824ddb735aaa`
 
