@@ -307,26 +307,26 @@ Note: The print part is taken directly from main, so the result of the hash for 
 
 ```asm
 ; init values.
-mov	    #0x10, r8          ; counter = 16 (length of the password)
-mov	    #0x43e0, r4        ; init destination
-mov	    #0x1, r5           ; init size
-mov	    #0x30, r6          ; offset of the first password byte inside SRAM.
+mov	#0x10, r8          ; counter = 16 (length of the password)
+mov	#0x43e0, r4        ; init destination
+mov	#0x1, r5           ; init size
+mov	#0x30, r6          ; offset of the first password byte inside SRAM.
 
 ; while(counter > 0)
-mov	    r4, r13            ; <TAG>
-mov	    r5, r14
-mov	    r6, r15
+mov	r4, r13            ; <TAG>
+mov	r5, r14
+mov	r6, r15
 call	#0x45b6            ; sha256_internal(offset, size, dest)
 
 ;------------------------------------------------------
 ; Start of the loop that prints the hash to the screen.
 ;------------------------------------------------------
-clr	    r11
-mov	    #0x43e0, r15
-add	    r11, r15
+clr	r11
+mov	#0x43e0, r15
+add	r11, r15
 mov.b	@r15, r14
-mov	    r14, r15
-and	    #0xf, r15
+mov	r14, r15
+and	#0xf, r15
 mov.b	0x4710(r15), r10
 clrc
 rrc.b	r14
@@ -336,21 +336,21 @@ clrc
 rrc.b	r14
 clrc
 rrc.b	r14
-and	    #0xf, r14
+and	#0xf, r14
 mov.b	0x4710(r14), r15
 call	#0x4578 <putchar>
 mov.b	r10, r15
 call	#0x4578 <putchar>
-inc 	r11
-cmp	    #0x20, r11
-jnz	    $-0x3a
+inc	r11
+cmp	#0x20, r11
+jnz	$-0x3a
 ;-----------------------------------------------------
 ; Ends of the loop that prints the hash to the screen.
 ;-----------------------------------------------------
 
-inc     r6                 ; offset++
-dec     r8                 ; counter--
-jnz     $-0x4c             ; jump to <TAG>
+inc	r6                 ; offset++
+dec	r8                 ; counter--
+jnz	$-0x4c             ; jump to <TAG>
 ret
 ```
 
@@ -410,7 +410,7 @@ And so now we have built a code that opens the door.
 push	#0x5010   ; password appears immediately after the code.
 push	#0x42
 call	#0x4550   ; INT
-add     #0x4, sp
+add	#0x4, sp
 ret
 ```
 
