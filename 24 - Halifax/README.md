@@ -410,7 +410,7 @@ And so now we have built a code that opens the door.
 push	#0x5010   ; password appears immediately after the code.
 push	#0x42
 call	#0x4550   ; INT
-add #0x4, sp
+add     #0x4, sp
 ret
 ```
 
