@@ -77,7 +77,7 @@ def h(string):
         index *= 31
     return index & 7
 
- input1 = (b'new ' + b'\x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c' + b' 0;').hex() # קוד שפותח את הדלת ללא הבית 0 וללא הבית רווח. ראו תמונה
+input1 = (b'new ' + b'\x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c' + b' 0;').hex() # קוד שפותח את הדלת ללא הבית 0 וללא הבית רווח. ראו תמונה
 input2 = (b'new ' + b'\x22'*2 + b' 0;').hex()
 input3 = (b'new ' + b'\x33'*2 + b' 0;').hex()
 input4 = (b'new ' + b'\x44'*2 + b' 0;').hex()
