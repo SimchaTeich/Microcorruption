@@ -21,9 +21,15 @@ So I will explain the third way.<br />
 Let's start.
 
 ### Black box test:
+A black box test shows a program that contains an account management system:
 
+<img src="./17.1.png" width="80%"></img>
+<img src="./17.2.png" width="80%"></img>
+
+Let's explore the system in more depth.
 
 ### Explore the code:
+
 
 ### How to exploit:
 
