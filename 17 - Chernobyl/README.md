@@ -17,7 +17,8 @@ The first time I solved it was very forced and difficult to explain.<br />
 When I wanted to explain what I did, I solved the challenge the second time in a better way.<br />
 And from this I understood a third way which is relatively "simpler" and smarter.
 
-So I will explain the third way. So let's start.
+So I will explain the third way.<br />
+Let's start.
 
 ### Black box test:
 
