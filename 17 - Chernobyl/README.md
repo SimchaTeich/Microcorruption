@@ -29,14 +29,30 @@ A black box test shows a program that contains an account management system:
 Let's explore the system in more depth.
 
 ### Explore the code:
-The main function calls run, where everything happens.<br />
-Therefore we will probably expect to overwrite a return address.
+Function `main` calls `run`, where everything happens.<br />
+Therefore we will probably expect to overwrite a return value.
 
 ```c
+typedef struct cell
+{
+    char username[16]; // including 0 at the end
+    short pin;
+} cell;
+
+typedef struct table
+{
+    short total;          // number of elements in the table
+    short num_of_entries; // actualy 2 ^ num_of_entries is the number of entries.
+    short num_of_cells;   // number of cells in each entry
+    cell **entrys;        // pointer to array with pointer for each entry.
+    short **counters;     // pointer to array with counters for num of elements per entry.
+    
+} table;
+
 void run()
 {
     char stack_memory[0x600];
-    table_p = create_hash_table(3, 5) // 2^3 entries, 5 cells for each entry
+    table *table_p = create_hash_table(3, 5) // 2^3 entries, 5 cells for each entry
 
     puts("Welcome to the lock controller.");
     puts("You can open the door by entering 'access [your name] [pin]'");
@@ -52,8 +68,8 @@ void run()
         {
             if(stack_memory[i] == 'a')
             {
-                char *username = i + 7;
-                i = username;
+                char *username = stack_memory + i + 7;
+                i =+ 7;
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] == ' ')
@@ -65,7 +81,7 @@ void run()
                 }
                 i++;
 
-                int pin = 0;
+                short pin = 0;
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] != ';')
@@ -76,11 +92,10 @@ void run()
                     i++;
                 }
 
-                int exist_pin = get_from_table(table_p, username);
+                short exist_pin = get_from_table(table_p, username);
                 if(exist_pin == -1)
                 {
                     puts("No such box.");
-                    // break;
                 }
                 
                 pin ^= exist_pin;
@@ -95,13 +110,12 @@ void run()
                 else
                 {
                     puts("Aceess denied");
-                    //break;
                 }
             }
             else if(stack_memory[i] == 'n')
             {
-                char *username = i + 4;
-                i = username;
+                char *username = stack_memory + i + 4;
+                i =+ 4;
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] == ' ')
@@ -113,7 +127,7 @@ void run()
                 }
                 i++;
 
-                int pin = 0;
+                short pin = 0;
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] != ';')
@@ -150,7 +164,6 @@ void run()
             while(stack_memory[i++] == ';') stack_memory[i++] = 0;
         }
     }
-
 }
 ```
 
