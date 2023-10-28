@@ -93,24 +93,16 @@ void run()
                 }
 
                 short exist_pin = get_from_table(table_p, username);
-                if(exist_pin == -1)
-                {
-                    puts("No such box.");
-                }
+                if(exist_pin == -1) puts("No such box.");
                 
                 pin ^= exist_pin;
                 pin &= 0x7fff;
                 if(pin >= 0)
                 {
-                    if(exist_pin < pin)
-                        puts("Access granted");
-                    else
-                        puts("Access granted; Access granted; but account not activated.");
+                    if(exist_pin < pin) puts("Access granted");
+                    else puts("Access granted; Access granted; but account not activated.");
                 }
-                else
-                {
-                    puts("Aceess denied");
-                }
+                else puts("Aceess denied");
             }
             else if(stack_memory[i] == 'n')
             {
@@ -145,15 +137,9 @@ void run()
                         printf("Adding user acount %s with pin %x..", username, pin);
                         add_to_table(table_p, username, pin);
                     }
-                    else
-                    {
-                        puts("User already has an acount.")
-                    }
+                    else puts("User already has an acount.")
                 }
-                else
-                {
-                    puts("Can not have a pin with higth bit set.");
-                }
+                else puts("Can not have a pin with higth bit set.");
             }
             else
             {
