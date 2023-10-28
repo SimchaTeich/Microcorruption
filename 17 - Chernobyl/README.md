@@ -137,7 +137,7 @@ void run()
                         printf("Adding user acount %s with pin %x..", username, pin);
                         add_to_table(table_p, username, pin);
                     }
-                    else puts("User already has an acount.")
+                    else puts("User already has an acount.");
                 }
                 else puts("Can not have a pin with higth bit set.");
             }
