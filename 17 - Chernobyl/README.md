@@ -100,8 +100,54 @@ void run()
             }
             else if(stack_memory[i] == 'n')
             {
-                
+                char *username = i + 4;
+                i = username;
+                while(stack_memory[i])
+                {
+                    if(stack_memory[i] == ' ')
+                    {
+                        stack_memory[i] = 0;
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+
+                int pin = 0;
+                while(stack_memory[i])
+                {
+                    if(stack_memory[i] != ';')
+                    {
+                        pin *= 10;
+                        pin += stack_memory[i] - 0x30;
+                    }
+                    i++;
+                }
+
+                if(pin >= 0)
+                {
+                    if(get_from_table(r8, username) == -1)
+                    {
+                        printf("Adding user acount %s with pin %x..", username, pin);
+                        add_to_table(table_p, username, pin);
+                    }
+                    else
+                    {
+                        puts("User already has an acount.")
+                    }
+                }
+                else
+                {
+                    puts("Can not have a pin with higth bit set.");
+                }
             }
+            else
+            {
+                puts("Invalid command.");
+                return 1;
+            }
+
+            while(stack_memory[i++] == ';') stack_memory[i++] = 0;
         }
     }
 
