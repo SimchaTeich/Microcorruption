@@ -29,6 +29,84 @@ A black box test shows a program that contains an account management system:
 Let's explore the system in more depth.
 
 ### Explore the code:
+The main function calls run, where everything happens.<br />
+Therefore we will probably expect to overwrite a return address.
+
+```c
+void run()
+{
+    char stack_memory[0x600];
+    table_p = create_hash_table(3, 5) // 2^3 entries, 5 cells for each entry
+
+    puts("Welcome to the lock controller.");
+    puts("You can open the door by entering 'access [your name] [pin]'");
+    puts();
+
+    while(1)
+    {
+        for(int i = 0; i < 0x600; i++) {stack_memory[i] = 0;}
+        getsn(stack_memory, 0x550);
+
+        int i = 0;
+        while(stack_memory[i])
+        {
+            if(stack_memory[i] == 'a')
+            {
+                char *username = i + 7;
+                i = username;
+                while(stack_memory[i])
+                {
+                    if(stack_memory[i] == ' ')
+                    {
+                        stack_memory[i] = 0;
+                        break;
+                    }
+                    i++;
+                }
+                i++;
+
+                int pin = 0;
+                while(stack_memory[i])
+                {
+                    if(stack_memory[i] != ';')
+                    {
+                        pin *= 10;
+                        pin += stack_memory[i] - 0x30;
+                    }
+                    i++;
+                }
+
+                int exist_pin = get_from_table(table_p, username);
+                if(exist_pin == -1)
+                {
+                    puts("No such box.");
+                    // break;
+                }
+                
+                pin ^= exist_pin;
+                pin &= 0x7fff;
+                if(pin >= 0)
+                {
+                    if(exist_pin < pin)
+                        puts("Access granted");
+                    else
+                        puts("Access granted; Access granted; but account not activated.");
+                }
+                else
+                {
+                    puts("Aceess denied");
+                    //break;
+                }
+            }
+            else if(stack_memory[i] == 'n')
+            {
+                
+            }
+        }
+    }
+
+}
+```
 
 
 ### How to exploit:
