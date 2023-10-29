@@ -195,7 +195,7 @@ Let's see the table in memory immediately after the operation of the function:
 
 <img src="./17.6.png"></img>
 
-* Blue: struct user
+* Blue: struct table
 * Green: array with pointers to entries.
 * Purple: array with counter of elements for each entry.
 * Yellow: the entries.
