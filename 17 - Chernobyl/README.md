@@ -190,9 +190,23 @@ The code above tells us a few things:
 
 The new functionality was not known to us before, so there is reason to suspect that it is the heart of the matter.<br />
 And so we will turn our attention to the following two functions: `create_hash_table` and `add_to_table`.<br />
+The function `create_hash_table` creates a hash table structure that is allocated in heap memory.<br />
+Let's see the table in memory immediately after the operation of the function:
+
+<img src="./17.6.png"></img>
+
+* Blue: struct user
+* Green: array with pointers to entries.
+* Purple: array with counter of elements for each entry.
+* Yellow: the entries.
+
+
+
 
 
 ### How to exploit:
+The following explanation assumes that you know very well how the release function works.<br />
+If you do not know this, or if you have forgotten, turn to the Algiers challenge.
 
 ```python
 #last!
