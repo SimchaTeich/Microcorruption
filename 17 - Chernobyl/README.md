@@ -32,6 +32,10 @@ Let's explore the system in more depth.
 Function `main` calls `run`, where everything happens.<br />
 Therefore we will probably expect to overwrite a return value.
 
+Below is the function `run`.<br />
+It took me a long time to decompile it manually, but a look at it will explain the whole program well.<br />
+Read it carefully:
+
 ```c
 typedef struct user
 {
@@ -171,6 +175,15 @@ void run()
     }
 }
 ```
+
+The code above tells us a few things:
+* The return value cannot be overridden using stack overflow
+* `printf`'s weakness cannot be used
+* Nothing interesting happens with the _access_ command, even if we enter correct user details.
+* **There is a new functionality** to add users by a command that starts with n.
+    * The length of the command is 3 letters, so we will call it "new" for convenience.
+    * The new users will be saved in a hash table.
+
 
 
 ### How to exploit:
