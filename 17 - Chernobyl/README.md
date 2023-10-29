@@ -34,7 +34,11 @@ Therefore we will probably expect to overwrite a return value.
 
 Below is the function `run`.<br />
 It took me a long time to decompile it manually, but a look at it will explain the whole program well.<br />
-Read it carefully:
+Read **the c code** afterwards carefully:
+
+<img src="./17.3.png"></img>
+<img src="./17.4.png"></img>
+<img src="./17.5.png"></img>
 
 ```c
 typedef struct user
@@ -184,6 +188,8 @@ The code above tells us a few things:
     * The length of the command is 3 letters, so we will call it "new" for convenience.
     * The new users will be saved in a hash table.
 
+The new functionality was not known to us before, so there is reason to suspect that it is the heart of the matter.<br />
+And so we will turn our attention to the following two functions: `create_hash_table` and `add_to_table`.<br />
 
 
 ### How to exploit:
