@@ -33,18 +33,18 @@ Function `main` calls `run`, where everything happens.<br />
 Therefore we will probably expect to overwrite a return value.
 
 ```c
-typedef struct cell
+typedef struct user
 {
     char username[16]; // including 0 at the end
     short pin;
-} cell;
+} user;
 
 typedef struct table
 {
     short total;          // number of elements in the table
     short num_of_entries; // actualy 2 ^ num_of_entries is the number of entries.
     short num_of_cells;   // number of cells in each entry
-    cell **entrys;        // pointer to array with pointer for each entry.
+    user **entrys;        // pointer to array with pointer for each entry.
     short **counters;     // pointer to array with counters for num of elements per entry.
     
 } table;
@@ -52,7 +52,11 @@ typedef struct table
 void run()
 {
     char stack_memory[0x600];
-    table *table_p = create_hash_table(3, 5) // 2^3 entries, 5 cells for each entry
+    char *username;                          // In the original code this memory is registers.
+    short pin;                               // In the original code this memory is registers.
+
+    // 2^3 entries, 5 cells for each entry
+    table *table_p = create_hash_table(3, 5) // In the original code this memory is registers.
 
     puts("Welcome to the lock controller.");
     puts("You can open the door by entering 'access [your name] [pin]'");
@@ -60,16 +64,20 @@ void run()
 
     while(1)
     {
+        // clean the buffer and get user input.
         for(int i = 0; i < 0x600; i++) {stack_memory[i] = 0;}
         getsn(stack_memory, 0x550);
 
         int i = 0;
         while(stack_memory[i])
         {
+            // command: 'access [USERNAME] [PIN]'
             if(stack_memory[i] == 'a')
             {
-                char *username = stack_memory + i + 7;
+                username = stack_memory + i + 7;
                 i =+ 7;
+
+                // Preparing the username string for printing (reset last character)
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] == ' ')
@@ -81,7 +89,8 @@ void run()
                 }
                 i++;
 
-                short pin = 0;
+                // Converting a numeric string to the corresponding numeric value.
+                pin = 0;
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] != ';')
@@ -91,10 +100,10 @@ void run()
                     }
                     i++;
                 }
-
+                
+                // Pointless attempt to gain access.
                 short exist_pin = get_from_table(table_p, username);
                 if(exist_pin == -1) puts("No such box.");
-                
                 pin ^= exist_pin;
                 pin &= 0x7fff;
                 if(pin >= 0)
@@ -104,10 +113,14 @@ void run()
                 }
                 else puts("Aceess denied");
             }
+
+            // Command: 'new [USERNAME] [PIN]'
             else if(stack_memory[i] == 'n')
             {
-                char *username = stack_memory + i + 4;
+                username = stack_memory + i + 4;
                 i =+ 4;
+
+                // Preparing the username string for printing (reset last character)
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] == ' ')
@@ -119,7 +132,8 @@ void run()
                 }
                 i++;
 
-                short pin = 0;
+                // Converting a numeric string to the corresponding numeric value.
+                pin = 0;
                 while(stack_memory[i])
                 {
                     if(stack_memory[i] != ';')
@@ -132,22 +146,27 @@ void run()
 
                 if(pin >= 0)
                 {
-                    if(get_from_table(r8, username) == -1)
+                    if(get_from_table(table_p, username) == -1)
                     {
                         printf("Adding user acount %s with pin %x..", username, pin);
+
+                        // Save the new user. very interesting...
                         add_to_table(table_p, username, pin);
                     }
                     else puts("User already has an acount.");
                 }
                 else puts("Can not have a pin with higth bit set.");
             }
+
+            // Command: any other..
             else
             {
                 puts("Invalid command.");
                 return 1;
             }
-
-            while(stack_memory[i++] == ';') stack_memory[i++] = 0;
+            
+            // Move all over the ";" until the next command.
+            while(stack_memory[i] == ';') stack_memory[i++] = 0;
         }
     }
 }
