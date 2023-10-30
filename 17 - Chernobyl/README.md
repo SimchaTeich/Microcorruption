@@ -256,6 +256,25 @@ A trial and error reveals to us that up to 0xb elements can be inserted into the
 
 So I went to learn about the meaning of `rehash` in the context of hash tables. It turns out that in order to keep the table balanced, starting from a certain amount of elements (every implementation is different. Here starting from 0xb) a larger table is allocated, all the elements are transferred from the old table to the new one (with a new index that depends on the size of the table. That's why it's called "rehash") and then the old table released.
 
+And so, similar to the Algiers challenge, we'll want to use free to change a return value.<br />
+Here is the return value that we would like to change:
+
+<img src="./17.12.png"></img>
+* `3e44` - 0x443e, return value from `run` back to `main`.
+
+In the code itself there is no visible option to open the door.<br />
+And so we would like to implant a code and jump to it..<br />
+Where can we implant code? into the table of course.<br />
+So we will inject code into the table and then check its address.
+We will remember that the code we built must not have the bytes \x00 and 
+x20 and we will build the following code:
+
+```asm
+xor	r15, r15            ; r15 = 0000
+mov.b	#0x117f, r15    ; r15 = 007f
+push	r15
+call	#0x4cec         ; address of INT
+```
 
 
 
