@@ -225,7 +225,7 @@ In fact, following the discovery of the hash function, we can know in advance wh
 But, what can we do with it?
 
 ### How to exploit:
-The following explanation assumes that you know very well how the release function works.<br />
+The following explanation assumes that you know very well how function `free` works.<br />
 If you do not know this, or if you have forgotten, turn to the Algiers challenge.
 
 The thing that comes to mind is the challenge of Algiers.<br />
