@@ -200,7 +200,7 @@ Let's see the table in memory immediately after the operation of the function:
 * Purple: array with counter of elements for each entry.
 * Yellow: the entries.
 
-Now we will go to the `add_to_table function`, which should fill the table with new users after the _new_ command.<br />
+Now we will go to the `add_to_table` function, which should fill the table with new users after the _new_ command.<br />
 At this point I went to learn about hash tables, and I learned that **there is a function called `hash` that receives some input and returns the index where it will enter in the table**. And indeed, `add_to_table` calls `hash`. Let's look at the `hash`:
 
 <img src="./17.7.png"></img>
@@ -227,6 +227,31 @@ But, what can we do with it?
 ### How to exploit:
 The following explanation assumes that you know very well how the release function works.<br />
 If you do not know this, or if you have forgotten, turn to the Algiers challenge.
+
+The thing that comes to mind is the challenge of Algiers.<br />
+Can we overwrite heap metadata? And if so, what do we do with it?<br />
+Let's try to answer the first question.
+
+Let's look at what happens when you enter exactly 5 users to the same login (Of course we used the recovered hash to make sure that our input goes where we want):
+
+Input: `new aa 1;new bb 2;new cc 3;new dd 4;new ee 5;`<br />
+Output:
+<img src="./17.8.png"></img>
+Heap memory:
+<img src="./17.9.png"></img>
+* White: struct user (username and pin) x 5
+
+Now we will try to insert another input to check whether it is really possible to overwrite the metadata or whether there is any integrity check on the amount of elements in the input (should be up to 5..)
+
+Input: `new ff 6`<br />
+Output:
+<img src="./17.10.png"></img>
+Heap memory:
+<img src="./17.11.png"></img>
+* The metadata of value 1 (the second) has been overridden.
+
+
+
 
 ```python
 #last!
