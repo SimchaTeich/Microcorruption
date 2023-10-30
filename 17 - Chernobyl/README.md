@@ -231,7 +231,7 @@ If you do not know this, or if you have forgotten, turn to the Algiers challenge
 The thing that comes to mind is the challenge of Algiers.<br />
 Can we overwrite heap metadata? And if so, what do we do with it?
 
-Let's look at what happens when you enter exactly 5 users to the same login (Of course we used the recovered hash to make sure that our input goes where we want):
+Let's look at what happens when you enter exactly 5 users to the same entry (Of course we used the recovered `hash` to make sure that our input goes where we want):
 
 Input: `new aa 1;new bb 2;new cc 3;new dd 4;new ee 5`<br />
 Output:<br />
