@@ -235,18 +235,18 @@ Let's try to answer the first question.
 Let's look at what happens when you enter exactly 5 users to the same login (Of course we used the recovered hash to make sure that our input goes where we want):
 
 Input: `new aa 1;new bb 2;new cc 3;new dd 4;new ee 5`<br />
-Output:
+Output:<br />
 <img src="./17.8.png"></img>
-Heap memory:
+Heap memory:<br />
 <img src="./17.9.png"></img>
 * White: struct user (username and pin) x 5
 
 Now we will try to insert another input (into the same entry) to check whether it is really possible to overwrite the metadata or whether there is any integrity check on the amount of elements in the input (should be up to 5..)
 
 Input: `new ff 6`<br />
-Output:
+Output:<br />
 <img src="./17.10.png"></img>
-Heap memory:
+Heap memory:<br />
 <img src="./17.11.png"></img>
 * The metadata of entry 1 (the second entry) has been overridden.
 
@@ -267,14 +267,16 @@ And so we would like to implant a code and jump to it..<br />
 Where can we implant code? into the table of course.<br />
 So we will inject code into the table and then check its address.
 We will remember that the code we built must not have the bytes \x00 and 
-x20 and we will build the following code:
+\x20 and we will build the following code:
 
 ```asm
-xor	r15, r15            ; r15 = 0000
+xor	r15, r15        ; r15 = 0000
 mov.b	#0x117f, r15    ; r15 = 007f
 push	r15
 call	#0x4cec         ; address of INT
 ```
+
+The code above in bytes looks like this: `0fef7f407f110f12b012ec4c`<br />
 
 
 
