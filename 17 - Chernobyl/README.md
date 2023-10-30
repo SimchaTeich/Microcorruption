@@ -247,10 +247,10 @@ Output:<br />
 <img src="./17.10.png"></img><br />
 Heap memory:<br />
 <img src="./17.11.png"></img>
-* The metadata of entry 1 (the second entry) has been overridden.
+* The metadata of _entry 1_ (the second entry) has been overridden.
 
 This means there is no security check.<br />
-Can we run over as much as we want? No.<br />
+Can we overwrite as much as we want? No.<br />
 A trial and error reveals to us that up to 0xb elements can be inserted into the table, and after the 0xc value a `rehash` is performed.
 
 So I went to learn about the meaning of `rehash` in the context of hash tables. It turns out that in order to keep the table balanced, starting from a certain amount of elements (every implementation is different. Here starting from 0xb) a larger table is allocated, all the elements are transferred from the old table to the new one (with a new index that depends on the size of the table. That's why it's called "rehash") and then the old table released.
@@ -260,6 +260,7 @@ Here is the return value that we would like to change:
 
 <img src="./17.12.png"></img>
 * `3e44` - 0x443e, return value from `run` back to `main`.
+* address of this return value is 0x43f6
 
 In the code itself there is no visible option to open the door.<br />
 And so we would like to implant a code and jump to it..<br />
