@@ -234,7 +234,7 @@ Let's try to answer the first question.
 
 Let's look at what happens when you enter exactly 5 users to the same login (Of course we used the recovered hash to make sure that our input goes where we want):
 
-Input: `new aa 1;new bb 2;new cc 3;new dd 4;new ee 5;`<br />
+Input: `new aa 1;new bb 2;new cc 3;new dd 4;new ee 5`<br />
 Output:
 <img src="./17.8.png"></img>
 Heap memory:
