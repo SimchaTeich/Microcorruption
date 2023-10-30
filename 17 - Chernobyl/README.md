@@ -297,9 +297,9 @@ Let's put the first input, which is a program that opens a door, into _entry 0_.
   ```
 
 Input: `6e6577200fef7f407f110f12b012ec4c2030`<br />
-Output:
+Output:<br />
 <img src="./17.13.png"></img><br />
-Heap memory:
+Heap memory:<br />
 <img src="./17.14.png"></img>
 * White: **injected code at address 0x5042**
 * Red:
