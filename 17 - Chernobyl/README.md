@@ -200,7 +200,29 @@ Let's see the table in memory immediately after the operation of the function:
 * Purple: array with counter of elements for each entry.
 * Yellow: the entries.
 
+Now we will go to the `add_to_table function`, which should fill the table with new users after the _new_ command.<br />
+At this point I went to learn about hash tables, and I learned that **there is a function called `hash` that receives some input and returns the index where it will enter in the table**. And indeed, `add_to_table` calls `hash`. Let's look at the `hash`:
 
+<img src="./17.7.png"></img>
+
+And this is how the same function looks in Python.<br />
+(except for the return line, which `add_to_table` does the modulo operation itself)
+
+```python
+NUM_OF_ENTRIES = 8
+
+def hash(username):
+    index = 0
+    
+    for c in username:
+        index += ord(c)
+        index *= 31
+
+    return index % NUM_OF_ENTRIES
+```
+
+In fact, following the discovery of the hash function, we can know in advance which entry in the table the username will enter.<br />
+But, what can we do with it?
 
 
 
