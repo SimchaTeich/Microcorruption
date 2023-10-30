@@ -241,14 +241,20 @@ Heap memory:
 <img src="./17.9.png"></img>
 * White: struct user (username and pin) x 5
 
-Now we will try to insert another input to check whether it is really possible to overwrite the metadata or whether there is any integrity check on the amount of elements in the input (should be up to 5..)
+Now we will try to insert another input (into the same entry) to check whether it is really possible to overwrite the metadata or whether there is any integrity check on the amount of elements in the input (should be up to 5..)
 
 Input: `new ff 6`<br />
 Output:
 <img src="./17.10.png"></img>
 Heap memory:
 <img src="./17.11.png"></img>
-* The metadata of value 1 (the second) has been overridden.
+* The metadata of entry 1 (the second entry) has been overridden.
+
+This means there is no security check.<br />
+Can we run over as much as we want? No.<br />
+A trial and error reveals to us that up to 0xb elements can be inserted into the table, and after the 0xc value a `rehash` is performed.
+
+So I went to learn about the meaning of `rehash` in the context of hash tables. It turns out that in order to keep the table balanced, starting from a certain amount of elements (every implementation is different. Here starting from 0xb) a larger table is allocated, all the elements are transferred from the old table to the new one (with a new index that depends on the size of the table. That's why it's called "rehash") and then the old table released.
 
 
 
