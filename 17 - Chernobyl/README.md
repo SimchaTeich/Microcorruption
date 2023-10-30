@@ -263,8 +263,8 @@ Here is the return value that we would like to change:
 * address of this return value is 0x43f6
 
 In the code itself there is no visible option to open the door.<br />
-And so we would like to implant a code and jump to it..<br />
-Where can we implant code? into the table of course.<br />
+And so we would like to inject a code and jump to it..<br />
+Where can we inject the code? into the table of course.<br />
 So we will inject code into the table and then check its address.
 We will remember that the code we built must not have the bytes \x00 and 
 \x20 and we will build the following code:
