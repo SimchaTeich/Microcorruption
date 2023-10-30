@@ -229,14 +229,13 @@ The following explanation assumes that you know very well how the release functi
 If you do not know this, or if you have forgotten, turn to the Algiers challenge.
 
 The thing that comes to mind is the challenge of Algiers.<br />
-Can we overwrite heap metadata? And if so, what do we do with it?<br />
-Let's try to answer the first question.
+Can we overwrite heap metadata? And if so, what do we do with it?
 
 Let's look at what happens when you enter exactly 5 users to the same login (Of course we used the recovered hash to make sure that our input goes where we want):
 
 Input: `new aa 1;new bb 2;new cc 3;new dd 4;new ee 5`<br />
 Output:<br />
-<img src="./17.8.png"></img>
+<img src="./17.8.png"></img><br />
 Heap memory:<br />
 <img src="./17.9.png"></img>
 * White: struct user (username and pin) x 5
@@ -245,7 +244,7 @@ Now we will try to insert another input (into the same entry) to check whether i
 
 Input: `new ff 6`<br />
 Output:<br />
-<img src="./17.10.png"></img>
+<img src="./17.10.png"></img><br />
 Heap memory:<br />
 <img src="./17.11.png"></img>
 * The metadata of entry 1 (the second entry) has been overridden.
@@ -256,7 +255,7 @@ A trial and error reveals to us that up to 0xb elements can be inserted into the
 
 So I went to learn about the meaning of `rehash` in the context of hash tables. It turns out that in order to keep the table balanced, starting from a certain amount of elements (every implementation is different. Here starting from 0xb) a larger table is allocated, all the elements are transferred from the old table to the new one (with a new index that depends on the size of the table. That's why it's called "rehash") and then the old table released.
 
-And so, similar to the Algiers challenge, we'll want to use free to change a return value.<br />
+And so, similar to the Algiers challenge, we'll want to use `free` to change a return value.<br />
 Here is the return value that we would like to change:
 
 <img src="./17.12.png"></img>
@@ -277,6 +276,58 @@ call	#0x4cec         ; address of INT
 ```
 
 The code above in bytes looks like this: `0fef7f407f110f12b012ec4c`<br />
+And we would like to insert it into one of the entries in the table and also change the metadata of the next entry. But which one?<br />
+
+We plan to use the same technique from the Algiers challenge.<br />
+For this, as part of the process we will want to overwrite the prev of chunk, so that when you release it what will happen is a change of the return value.<br />
+And now unlike the challenge of Algiers **we have a problem: the release order is from top to bottom.** So with each release, the prev of the next will change. So how can we change the prev of one of the entries in the table, if it changes before we release it?
+
+The answer is that only the release of _entry 0_ does not change the prev of _entry 1_. Because above _entry 0_ the memory has not been released yet. So we will overwrite the metadata of _entry 1_ by inserting it into _entry 0_.
+
+Let's put the first input, which is a program that opens a door, into _entry 0_.
+*  ```python
+   unlock_door_code = "\x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c"
+   hash(unlock_door_code) # == 0
+   ```
+* therefore, there is no need to add more characters to it to make it enter index 0.
+* So, this is the python code that create the input:
+  ```python
+  print(b'new \x0f\xef\x7f\x40\x7f\x11\x0f\x12\xb0\x12\xec\x4c 0'.hex())
+  # 6e6577200fef7f407f110f12b012ec4c2030
+  ```
+
+Input: `6e6577200fef7f407f110f12b012ec4c2030`<br />
+Output:
+<img src="./17.13.png"></img><br />
+Heap memory:
+<img src="./17.14.png"></img>
+* White: **injected code at address 0x5042**
+* Red:
+    * `3c50` - 0x503c, prev of _entry 1_.
+    we want it to be 0x43f2 witch is the addrss of the fake "chunk" with the return value.
+    * `fc50` - 0x50fc, next of _entry 1_.
+    If we leave it, then it is the one that will cause the prev of _entry 2_ to be 0x43f2. And this will cause the following releases to change the fake "chunk" (because everyone will unite with it, according to `free`..). So we will change it to something else. But for what?
+    * `b500` - 0xb5, size of chank of _entry 1_.
+    we want it to be (0x5042 - 0x443e - 6 = ) 0xbfe, or 0xbff with the flag of malloc.
+
+So, what will be the value of the next of _entry 1_?<br />
+We'd like something that wouldn't be its current value 0x50fc, of course.<br />
+But there is another interesting thing here - if we are not careful, we will get a **heap exceeded** error. And that's because of the `rehash` process.<br />
+`rehash` calls `malloc` **before** the `free`.<br />
+And function `malloc` goes from the beginning of the heap to all the next of all the chunks and looks for the end (linked list). If the search for the end of the list fails, the error will be raised.<br />
+And so when we change the value of the next of _entry 1_, we will also want such a value that will not interfere with the "trip" of `malloc`.<br />
+Therefore we would like to change it, to be the address of the last node in the linked list.<br />
+The address of the last node in the linked list is the same as the next of _entry 7_. ie 0x533c.
+
+And in addition, we won't have to worry about an unexpected addition to the value 0x5042 (which replaces the return value). because when _entry 1_ is released, `free` will treat its next as a chunk that was not released (which is actually the start of the newly allocated table).
+
+Everything I've said so far has come from trial and error.<br />
+Hope things are clear.<br />
+We will now summarize the change made to the metadata of _entry 1_:
+* `3c50`, 0x503c (prev of chunk of _entry 1_) replace by 0x43f2 - `f243`
+* `fc50`, 0x50fc (next of chunk of _entry 1_) replace by 0x533c - `3c53`
+* `b500`, 0xb5 (size of chunk of _entry 1_) replace by 0x0bff - `ff0b`
+
 
 
 
